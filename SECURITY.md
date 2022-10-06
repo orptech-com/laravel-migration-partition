@@ -4,7 +4,7 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability within Laravel, please send an email to Arda Karaderi at info@orptech.com. All security vulnerabilities will be promptly addressed.
+If you discover a security vulnerability within the package, please send an email to Arda Karaderi at info@orptech.com. All security vulnerabilities will be promptly addressed.
 
 ## Supported Versions
 
