@@ -42,6 +42,15 @@ Schema::createPartitioned('[YourTableNameHere]', function (Blueprint $table) {
 }, '[compositeKeyOne]', '[compositeKeyTwo]', '[rangePartitionKey]');
 ```
 
+### Important
+- This package currently supports PostgreSQL Range Partitions.
+- You shouldn't define any primary keys in your migration. The package creates a composite key while setting up the table.
+- You need to create an initial partition to start using the tables. (PostgreSQL)
+
+```php
+DB::statement("CREATE TABLE [partition_name_here] PARTITION OF [table_name_here] FOR VALUES FROM [starting_value_here] TO [end_value_here]");
+```
+
 ## Testing
 
 ```bash
