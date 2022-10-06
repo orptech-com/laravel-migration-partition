@@ -4,7 +4,7 @@
 </div>
 
 # Laravel Partitions for Migrations
-This package extends Illuminate to provide partitioned table creation in migrations.
+This package extends Illuminate to provide partitioned table creation in migrations for PostgreSQL. Support for other DMBS's will be added soon.
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/orptech/laravel-migration-partition.svg?style=flat-square)](https://packagist.org/packages/orptech/laravel-migration-partition)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/orptech-com/laravel-migration-partition/run-tests?label=tests)](https://github.com/orptech-com/laravel-migration-partition/actions?query=workflow%3Arun-tests+branch%3Amain)
