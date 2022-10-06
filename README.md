@@ -22,13 +22,21 @@ You can install the package via composer:
 composer require orptech/laravel-migration-partition
 ```
 
-## Supported DBMS List
+## DBMS Support
 
 - PostgreSQL
 
+### Planned Development
+
+- MySQL
+- MariaDB
+- SQL Server 2017+
+- SQLite 3.8.8+
 
 ## Usage
 
+
+### PostgreSQL Range Partitioning 
 Instead of importing Illuminate's Schema import this package's schema:
 ```php
 use Illuminate\Database\Schema\Blueprint;
