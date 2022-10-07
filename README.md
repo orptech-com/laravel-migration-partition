@@ -4,7 +4,9 @@
 </div>
 
 # Laravel Partitions for Migrations
-This package extends Illuminate to provide partitioned table creation in migrations for PostgreSQL. Support for other DMBS's will be added soon.
+
+This package extends Illuminate to provide partitioned table creation in migrations for PostgreSQL. Support for other
+DMBS's will be added soon.
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/orptech/laravel-migration-partition.svg?style=flat-square)](https://packagist.org/packages/orptech/laravel-migration-partition)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/orptech-com/laravel-migration-partition/run-tests?label=tests)](https://github.com/orptech-com/laravel-migration-partition/actions?query=workflow%3Arun-tests+branch%3Amain)
@@ -12,7 +14,10 @@ This package extends Illuminate to provide partitioned table creation in migrati
 
 ## ORPTech
 
-We are ORPTech. Here at ORPTech, we pride ourselves in ensuring that clients and services have a peaceful, safe and smooth interaction. We know how difficult it is to build trust for a service, therefore we are here to help bridge the gaps within the market via our robust applications. Please contact us for further information on how our services might protect your business.
+We are ORPTech. Here at ORPTech, we pride ourselves in ensuring that clients and services have a peaceful, safe and
+smooth interaction. We know how difficult it is to build trust for a service, therefore we are here to help bridge the
+gaps within the market via our robust applications. Please contact us for further information on how our services might
+protect your business.
 
 ## Installation
 
@@ -35,15 +40,17 @@ composer require orptech/laravel-migration-partition
 
 ## Usage
 
+### PostgreSQL Range Partitioning
 
-### PostgreSQL Range Partitioning 
 Instead of importing Illuminate's Schema import this package's schema:
+
 ```php
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 ```
 
 ### Template Usage
+
 ```php
 use ORPTech\MigrationPartition\Database\Schema\Blueprint;
 use ORPTech\MigrationPartition\Support\Facades\Schema;
@@ -54,9 +61,17 @@ Schema::createPartitioned('[YourTableNameHere]', function (Blueprint $table) {
 ```
 
 ### Important
+
 - This package currently supports PostgreSQL Range Partitions.
-- You shouldn't define any primary keys in your migration. The package creates a composite key while setting up the table.
+- You shouldn't define any primary keys in your migration. The package creates a composite key while setting up the
+  table.
 - You need to create an initial partition to start using the tables. (PostgreSQL)
+
+```php
+Schema::attachPartition('[YourCreatedPartitionTableNameHere]', function (Blueprint $table) {}, '[SubfixForPartition]', '[StartDate]', '[EndDate]');
+```
+
+#### OR
 
 ```php
 DB::statement("CREATE TABLE [partition_name_here] PARTITION OF [table_name_here] FOR VALUES FROM [starting_value_here] TO [end_value_here]");
@@ -71,7 +86,6 @@ composer test
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
 
 ## Security Vulnerabilities
 
