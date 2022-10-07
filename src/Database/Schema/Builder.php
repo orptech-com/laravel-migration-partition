@@ -35,6 +35,25 @@ class Builder extends \Illuminate\Database\Schema\Builder
     }
 
     /**
+     * Create a new table on the schema with partitions.
+     *
+     * @param  string  $table
+     * @param  \Closure  $callback
+     * @return void
+     */
+    public function attachPartition($table, Closure $callback, string $subfixForPartition, string $startDate, string $endDate)
+    {
+        $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $subfixForPartition, $startDate, $endDate) {
+            $blueprint->attachPartition();
+            $blueprint->subfixForPartition = $subfixForPartition;
+            $blueprint->startDate = $startDate;
+            $blueprint->endDate = $endDate;
+
+            $callback($blueprint);
+        }));
+    }
+
+    /**
      * Create a new command set with a Closure.
      *
      * @param  string  $table

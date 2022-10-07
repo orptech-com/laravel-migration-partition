@@ -23,4 +23,22 @@ class PostgresGrammar extends \Illuminate\Database\Schema\Grammars\PostgresGramm
             $blueprint->rangeKey
         )], $this->compileAutoIncrementStartingValues($blueprint))));
     }
+    /**
+     * Compile a create table partition command for partitioned table
+     *
+     * @param  Blueprint  $blueprint
+     * @param  \Illuminate\Support\Fluent  $command
+     * @return array
+     */
+    public function compileAttachPartition(Blueprint $blueprint, Fluent $command)
+    {
+        return array_values(array_filter(array_merge([sprintf('%s table %s_%s partition of %s for values from (\'%s\') to (\'%s\')',
+            $blueprint->temporary ? 'create temporary' : 'create',
+            str_replace("\"", "", $this->wrapTable($blueprint)),
+            $blueprint->subfixForPartition,
+            str_replace("\"", "", $this->wrapTable($blueprint)),
+            $blueprint->startDate,
+            $blueprint->endDate
+        )], $this->compileAutoIncrementStartingValues($blueprint))));
+    }
 }
