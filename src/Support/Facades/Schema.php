@@ -8,7 +8,7 @@ use RuntimeException;
 
 /**
  * @method static  createPartitioned(string $table, \Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $rangeKey)
- *
+ * @method static  attachPartition (string $table, \Closure $callback, string $subfixForPartition, string $startDate, string $endDate)
  * @see \ORPTech\MigrationPartition\Database\Schema\Builder
  */
 class Schema extends Facade
