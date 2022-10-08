@@ -52,7 +52,7 @@ class PostgresGrammar extends IlluminatePostgresGrammar
     {
         return array_values(array_filter(array_merge([sprintf('create table %s (%s) partition by list(%s)',
             $this->wrapTable($blueprint),
-            sprintf('%s, %s', implode(', ', $this->getColumns($blueprint)), sprintf('primary key (%s, %s)', $blueprint->pkCompositeOne, $blueprint->pkCompositeTwo)),
+            $this->getColumns($blueprint),
             $blueprint->listPartitionKey
         )], $this->compileAutoIncrementStartingValues($blueprint))));
     }
