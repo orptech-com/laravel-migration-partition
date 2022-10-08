@@ -59,6 +59,12 @@ Schema::createPartitioned('[YourTableNameHere]', function (Blueprint $table) {
 - You need to create an initial partition to start using the tables. (PostgreSQL)
 
 ```php
+Schema::attachPartition('[YourCreatedPartitionTableNameHere]', function (Blueprint $table) {}, '[SubfixForPartition]', '[StartDate]', '[EndDate]');
+```
+
+#### OR
+
+```php
 DB::statement("CREATE TABLE [partition_name_here] PARTITION OF [table_name_here] FOR VALUES FROM [starting_value_here] TO [end_value_here]");
 ```
 
