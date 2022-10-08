@@ -63,11 +63,32 @@ class Blueprint extends IlluminateBlueprint
     public $listPartitionValue;
 
     /**
+     * Column key for creating a table with hash partition.
+     *
+     * @var string
+     */
+    public $hashPartitionKey;
+
+    /**
+     * Hashing modulus for creating a hash partition.
+     *
+     * @var int
+     */
+    public $hashModulus;
+
+    /**
+     * Hashing reminder for creating a hash partition.
+     *
+     * @var int
+     */
+    public $hashRemainder;
+
+    /**
      * List of commands that trigger the creating function.
      *
      * @var array
      */
-    private $creators = ['create', 'createRangePartitioned', 'createListPartitioned'];
+    private $creators = ['create', 'createRangePartitioned', 'createListPartitioned', 'createHashPartitioned'];
 
     /**
      * Determine if the blueprint has a create command.
@@ -92,7 +113,7 @@ class Blueprint extends IlluminateBlueprint
     }
 
     /**
-     * Create range partition and attach it to the parttioned table.
+     * Create a range partition and attach it to the partitioned table.
      *
      * @return \Illuminate\Support\Fluent
      */
@@ -112,12 +133,32 @@ class Blueprint extends IlluminateBlueprint
     }
 
     /**
-     * Create list partition and attach it to the parttioned table.
+     * Create a list partition and attach it to the partitioned table.
      *
      * @return \Illuminate\Support\Fluent
      */
     public function attachListPartition()
     {
         return $this->addCommand('attachListPartition');
+    }
+
+    /**
+     * Indicate that the table needs to be created with a hash partition.
+     *
+     * @return \Illuminate\Support\Fluent
+     */
+    public function createHashPartitioned()
+    {
+        return $this->addCommand('createHashPartitioned');
+    }
+
+    /**
+     * Create a hash partition and attach it to the partitioned table.
+     *
+     * @return \Illuminate\Support\Fluent
+     */
+    public function attachHashPartition()
+    {
+        return $this->addCommand('attachHashPartition');
     }
 }

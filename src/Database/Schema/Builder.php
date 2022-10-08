@@ -19,8 +19,11 @@ class Builder extends IlluminateBuilder
     /**
      * Create a new table on the schema with range partitions.
      *
-     * @param  string  $table
-     * @param  \Closure  $callback
+     * @param string $table
+     * @param \Closure $callback
+     * @param string $pkCompositeOne
+     * @param string $pkCompositeTwo
+     * @param string $rangeKey
      * @return void
      */
     public function createRangePartitioned($table, Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $rangeKey)
@@ -36,10 +39,13 @@ class Builder extends IlluminateBuilder
     }
 
     /**
-     * Create a new partition on the table.
+     * Create a new range partition on the table.
      *
-     * @param  string  $table
-     * @param  \Closure  $callback
+     * @param string $table
+     * @param \Closure $callback
+     * @param string $subfixForPartition
+     * @param string $startDate
+     * @param string $endDate
      * @return void
      */
     public function attachRangePartition($table, Closure $callback, string $subfixForPartition, string $startDate, string $endDate)
@@ -57,8 +63,9 @@ class Builder extends IlluminateBuilder
     /**
      * Create a new table on the schema with list partitions.
      *
-     * @param  string  $table
-     * @param  \Closure  $callback
+     * @param string $table
+     * @param \Closure $callback
+     * @param string $listPartitionKey
      * @return void
      */
     public function createListPartitioned($table, Closure $callback, string $listPartitionKey)
@@ -72,10 +79,12 @@ class Builder extends IlluminateBuilder
     }
 
     /**
-     * Create a new partition on the table.
+     * Create a new list partition on the table.
      *
-     * @param  string  $table
-     * @param  \Closure  $callback
+     * @param string $table
+     * @param \Closure $callback
+     * @param string $subfixForPartition
+     * @param string $listPartitionValue
      * @return void
      */
     public function attachListPartition($table, Closure $callback, string $subfixForPartition, string $listPartitionValue)
@@ -84,6 +93,46 @@ class Builder extends IlluminateBuilder
             $blueprint->attachListPartition();
             $blueprint->subfixForPartition = $subfixForPartition;
             $blueprint->listPartitionValue = $listPartitionValue;
+
+            $callback($blueprint);
+        }));
+    }
+
+    /**
+     * Create a new table on the schema with hash partitions.
+     *
+     * @param string $table
+     * @param \Closure $callback
+     * @param string $hashPartitionKey
+     * @return void
+     */
+    public function createHashPartitioned($table, Closure $callback, string $hashPartitionKey)
+    {
+        $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $hashPartitionKey) {
+            $blueprint->createHashPartitioned();
+            $blueprint->hashPartitionKey = $hashPartitionKey;
+
+            $callback($blueprint);
+        }));
+    }
+
+    /**
+     * Create a new hash partition on the table.
+     *
+     * @param string $table
+     * @param \Closure $callback
+     * @param string $subfixForPartition
+     * @param string $hashModulus
+     * @param string $hashRemainder
+     * @return void
+     */
+    public function attachHashPartition($table, Closure $callback, string $subfixForPartition, string $hashModulus, string $hashRemainder)
+    {
+        $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $subfixForPartition, $hashModulus, $hashRemainder) {
+            $blueprint->attachHashPartition();
+            $blueprint->subfixForPartition = $subfixForPartition;
+            $blueprint->hashModulus = $hashModulus;
+            $blueprint->hashRemainder = $hashRemainder;
 
             $callback($blueprint);
         }));

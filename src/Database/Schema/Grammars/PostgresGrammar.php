@@ -72,4 +72,37 @@ class PostgresGrammar extends IlluminatePostgresGrammar
             $blueprint->listPartitionValue,
         )], $this->compileAutoIncrementStartingValues($blueprint))));
     }
+
+    /**
+     * Compile a create table command with its hash partitions.
+     *
+     * @param  Blueprint  $blueprint
+     * @param  \Illuminate\Support\Fluent  $command
+     * @return array
+     */
+    public function compileCreateHashPartitioned(Blueprint $blueprint, Fluent $command)
+    {
+        return array_values(array_filter(array_merge([sprintf('create table %s (%s) partition by hash(%s)',
+            $this->wrapTable($blueprint),
+            $this->getColumns($blueprint),
+            $blueprint->hashPartitionKey
+        )], $this->compileAutoIncrementStartingValues($blueprint))));
+    }
+    /**
+     * Compile a create table partition command for a hash partitioned table.
+     *
+     * @param  Blueprint  $blueprint
+     * @param  \Illuminate\Support\Fluent  $command
+     * @return array
+     */
+    public function compileAttachHasPartition(Blueprint $blueprint, Fluent $command)
+    {
+        return array_values(array_filter(array_merge([sprintf('create table %s_%s partition of %s for values with (modulus %s, remainder %s)',
+            str_replace("\"", "", $this->wrapTable($blueprint)),
+            $blueprint->subfixForPartition,
+            str_replace("\"", "", $this->wrapTable($blueprint)),
+            $blueprint->hashModulus,
+            $blueprint->hashRemainder,
+        )], $this->compileAutoIncrementStartingValues($blueprint))));
+    }
 }
