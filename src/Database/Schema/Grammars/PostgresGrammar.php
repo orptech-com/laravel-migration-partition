@@ -30,7 +30,7 @@ class PostgresGrammar extends IlluminatePostgresGrammar
      * @param  \Illuminate\Support\Fluent  $command
      * @return array
      */
-    public function compileAttachRangePartition(Blueprint $blueprint, Fluent $command)
+    public function compileInitRangePartition(Blueprint $blueprint, Fluent $command)
     {
         return array_values(array_filter(array_merge([sprintf('create table %s_%s partition of %s for values from (\'%s\') to (\'%s\')',
             str_replace("\"", "", $this->wrapTable($blueprint)),
@@ -63,7 +63,7 @@ class PostgresGrammar extends IlluminatePostgresGrammar
      * @param  \Illuminate\Support\Fluent  $command
      * @return array
      */
-    public function compileAttachListPartition(Blueprint $blueprint, Fluent $command)
+    public function compileInitListPartition(Blueprint $blueprint, Fluent $command)
     {
         return array_values(array_filter(array_merge([sprintf('create table %s_%s partition of %s for values in (\'%s\')',
             str_replace("\"", "", $this->wrapTable($blueprint)),
@@ -95,7 +95,7 @@ class PostgresGrammar extends IlluminatePostgresGrammar
      * @param  \Illuminate\Support\Fluent  $command
      * @return array
      */
-    public function compileAttachHasPartition(Blueprint $blueprint, Fluent $command)
+    public function compileInitHasPartition(Blueprint $blueprint, Fluent $command)
     {
         return array_values(array_filter(array_merge([sprintf('create table %s_%s partition of %s for values with (modulus %s, remainder %s)',
             str_replace("\"", "", $this->wrapTable($blueprint)),

@@ -8,11 +8,11 @@ use RuntimeException;
 
 /**
  * @method static  createRangePartitioned(string $table, \Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $rangeKey)
- * @method static  attachRangePartition(string $table, \Closure $callback, string $subfixForPartition, string $startDate, string $endDate)
+ * @method static  initRangePartition(string $table, \Closure $callback, string $subfixForPartition, string $startDate, string $endDate)
  * @method static  createListPartitioned(string $table, \Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $listPartitionKey)
- * @method static  attachListPartition(string $table, \Closure $callback, string $subfixForPartition, string $listPartitionValue)
+ * @method static  initListPartition(string $table, \Closure $callback, string $subfixForPartition, string $listPartitionValue)
  * @method static  createHashPartitioned(string $table, \Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $hashPartitionKey)
- * @method static  attachHashPartition(string $table, \Closure $callback, string $subfixForPartition, int $hashModulus, int $hashRemainder)
+ * @method static  initHashPartition(string $table, \Closure $callback, string $subfixForPartition, int $hashModulus, int $hashRemainder)
  * @see \ORPTech\MigrationPartition\Database\Schema\Builder
  */
 class Schema extends Facade

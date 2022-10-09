@@ -89,7 +89,7 @@ Schema::createHashPartitioned('[YourTableNameHere]', function (Blueprint $table)
 use ORPTech\MigrationPartition\Database\Schema\Blueprint;
 use ORPTech\MigrationPartition\Support\Facades\Schema;
 
-Schema::attachRangePartition('[YourCreatedPartitionTableNameHere]', function (Blueprint $table) {}, '[SubfixForPartition]', '[StartDate]', '[EndDate]');
+Schema::initRangePartition('[YourCreatedPartitionTableNameHere]', function (Blueprint $table) {}, '[SubfixForPartition]', '[StartDate]', '[EndDate]');
 ```
 
 #### List Partition
@@ -98,7 +98,7 @@ Schema::attachRangePartition('[YourCreatedPartitionTableNameHere]', function (Bl
 use ORPTech\MigrationPartition\Database\Schema\Blueprint;
 use ORPTech\MigrationPartition\Support\Facades\Schema;
 
-Schema::attachListPartition('[YourCreatedPartitionTableNameHere]', function (Blueprint $table) {}, '[SubfixForPartition]', '[listPartitionValue]');
+Schema::initListPartition('[YourCreatedPartitionTableNameHere]', function (Blueprint $table) {}, '[SubfixForPartition]', '[listPartitionValue]');
 ```
 
 #### Hash Partition
@@ -107,7 +107,7 @@ Schema::attachListPartition('[YourCreatedPartitionTableNameHere]', function (Blu
 use ORPTech\MigrationPartition\Database\Schema\Blueprint;
 use ORPTech\MigrationPartition\Support\Facades\Schema;
 
-Schema::attachHashPartition('[YourCreatedPartitionTableNameHere]', function (Blueprint $table) {}, '[SubfixForPartition]', '[hashModulus]', '[hashRemainder]');
+Schema::initHashPartition('[YourCreatedPartitionTableNameHere]', function (Blueprint $table) {}, '[SubfixForPartition]', '[hashModulus]', '[hashRemainder]');
 ```
 
 ## Testing

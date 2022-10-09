@@ -48,7 +48,7 @@ class Builder extends IlluminateBuilder
      * @param string $endDate
      * @return void
      */
-    public function attachRangePartition(string $table, Closure $callback, string $subfixForPartition, string $startDate, string $endDate)
+    public function initRangePartition(string $table, Closure $callback, string $subfixForPartition, string $startDate, string $endDate)
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $subfixForPartition, $startDate, $endDate) {
             $blueprint->attachRangePartition();
@@ -91,7 +91,7 @@ class Builder extends IlluminateBuilder
      * @param string $listPartitionValue
      * @return void
      */
-    public function attachListPartition(string $table, Closure $callback, string $subfixForPartition, string $listPartitionValue)
+    public function initListPartition(string $table, Closure $callback, string $subfixForPartition, string $listPartitionValue)
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $subfixForPartition, $listPartitionValue) {
             $blueprint->attachListPartition();
@@ -134,7 +134,7 @@ class Builder extends IlluminateBuilder
      * @param int $hashRemainder
      * @return void
      */
-    public function attachHashPartition(string $table, Closure $callback, string $subfixForPartition, int $hashModulus, int $hashRemainder)
+    public function initHashPartition(string $table, Closure $callback, string $subfixForPartition, int $hashModulus, int $hashRemainder)
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $subfixForPartition, $hashModulus, $hashRemainder) {
             $blueprint->attachHashPartition();

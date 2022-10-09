@@ -117,9 +117,9 @@ class Blueprint extends IlluminateBlueprint
      *
      * @return \Illuminate\Support\Fluent
      */
-    public function attachRangePartition()
+    public function initRangePartition()
     {
-        return $this->addCommand('attachRangePartition');
+        return $this->addCommand('initRangePartition');
     }
 
     /**
@@ -137,9 +137,9 @@ class Blueprint extends IlluminateBlueprint
      *
      * @return \Illuminate\Support\Fluent
      */
-    public function attachListPartition()
+    public function initListPartition()
     {
-        return $this->addCommand('attachListPartition');
+        return $this->addCommand('initListPartition');
     }
 
     /**
@@ -157,8 +157,8 @@ class Blueprint extends IlluminateBlueprint
      *
      * @return \Illuminate\Support\Fluent
      */
-    public function attachHashPartition()
+    public function initHashPartition()
     {
-        return $this->addCommand('attachHashPartition');
+        return $this->addCommand('initHashPartition');
     }
 }
