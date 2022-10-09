@@ -12,7 +12,7 @@ use RuntimeException;
  * @method static  createListPartitioned(string $table, \Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $listPartitionKey)
  * @method static  attachListPartition(string $table, \Closure $callback, string $subfixForPartition, string $listPartitionValue)
  * @method static  createHashPartitioned(string $table, \Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $hashPartitionKey)
- * @method static  attachHashPartition(string $table, \Closure $callback, string $subfixForPartition, string $hashModulus, string $hashRemainder)
+ * @method static  attachHashPartition(string $table, \Closure $callback, string $subfixForPartition, int $hashModulus, int $hashRemainder)
  * @see \ORPTech\MigrationPartition\Database\Schema\Builder
  */
 class Schema extends Facade

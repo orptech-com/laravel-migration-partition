@@ -44,13 +44,38 @@ use Illuminate\Support\Facades\Schema;
 ```
 
 ### Template Usage
+
+#### Range Partition
+
 ```php
 use ORPTech\MigrationPartition\Database\Schema\Blueprint;
 use ORPTech\MigrationPartition\Support\Facades\Schema;
 
-Schema::createPartitioned('[YourTableNameHere]', function (Blueprint $table) {
+Schema::createRangePartitioned('[YourTableNameHere]', function (Blueprint $table) {
     //...
 }, '[compositeKeyOne]', '[compositeKeyTwo]', '[rangePartitionKey]');
+```
+
+#### List Partition
+
+```php
+use ORPTech\MigrationPartition\Database\Schema\Blueprint;
+use ORPTech\MigrationPartition\Support\Facades\Schema;
+
+Schema::createListPartitioned('[YourTableNameHere]', function (Blueprint $table) {
+    //...
+}, '[compositeKeyOne]', '[compositeKeyTwo]', '[listPartitionKey]');
+```
+
+#### Hash Partition
+
+```php
+use ORPTech\MigrationPartition\Database\Schema\Blueprint;
+use ORPTech\MigrationPartition\Support\Facades\Schema;
+
+Schema::createHashPartitioned('[YourTableNameHere]', function (Blueprint $table) {
+    //...
+}, '[compositeKeyOne]', '[compositeKeyTwo]', '[hashPartitionKey]');
 ```
 
 ### Important
@@ -58,14 +83,31 @@ Schema::createPartitioned('[YourTableNameHere]', function (Blueprint $table) {
 - You shouldn't define any primary keys in your migration. The package creates a composite key while setting up the table.
 - You need to create an initial partition to start using the tables. (PostgreSQL)
 
+#### Range Partition
+
 ```php
-Schema::attachPartition('[YourCreatedPartitionTableNameHere]', function (Blueprint $table) {}, '[SubfixForPartition]', '[StartDate]', '[EndDate]');
+use ORPTech\MigrationPartition\Database\Schema\Blueprint;
+use ORPTech\MigrationPartition\Support\Facades\Schema;
+
+Schema::attachRangePartition('[YourCreatedPartitionTableNameHere]', function (Blueprint $table) {}, '[SubfixForPartition]', '[StartDate]', '[EndDate]');
 ```
 
-#### OR
+#### List Partition
 
 ```php
-DB::statement("CREATE TABLE [partition_name_here] PARTITION OF [table_name_here] FOR VALUES FROM [starting_value_here] TO [end_value_here]");
+use ORPTech\MigrationPartition\Database\Schema\Blueprint;
+use ORPTech\MigrationPartition\Support\Facades\Schema;
+
+Schema::attachListPartition('[YourCreatedPartitionTableNameHere]', function (Blueprint $table) {}, '[SubfixForPartition]', '[listPartitionValue]');
+```
+
+#### Hash Partition
+
+```php
+use ORPTech\MigrationPartition\Database\Schema\Blueprint;
+use ORPTech\MigrationPartition\Support\Facades\Schema;
+
+Schema::attachHashPartition('[YourCreatedPartitionTableNameHere]', function (Blueprint $table) {}, '[SubfixForPartition]', '[hashModulus]', '[hashRemainder]');
 ```
 
 ## Testing

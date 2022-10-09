@@ -130,11 +130,11 @@ class Builder extends IlluminateBuilder
      * @param string $table
      * @param \Closure $callback
      * @param string $subfixForPartition
-     * @param string $hashModulus
-     * @param string $hashRemainder
+     * @param int $hashModulus
+     * @param int $hashRemainder
      * @return void
      */
-    public function attachHashPartition(string $table, Closure $callback, string $subfixForPartition, string $hashModulus, string $hashRemainder)
+    public function attachHashPartition(string $table, Closure $callback, string $subfixForPartition, int $hashModulus, int $hashRemainder)
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $subfixForPartition, $hashModulus, $hashRemainder) {
             $blueprint->attachHashPartition();
