@@ -26,7 +26,7 @@ class Builder extends IlluminateBuilder
      * @param string $rangeKey
      * @return void
      */
-    public function createRangePartitioned($table, Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $rangeKey)
+    public function createRangePartitioned(string $table, Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $rangeKey)
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $pkCompositeOne, $pkCompositeTwo, $rangeKey) {
             $blueprint->createRangePartitioned();
@@ -48,7 +48,7 @@ class Builder extends IlluminateBuilder
      * @param string $endDate
      * @return void
      */
-    public function attachRangePartition($table, Closure $callback, string $subfixForPartition, string $startDate, string $endDate)
+    public function attachRangePartition(string $table, Closure $callback, string $subfixForPartition, string $startDate, string $endDate)
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $subfixForPartition, $startDate, $endDate) {
             $blueprint->attachRangePartition();
@@ -65,13 +65,17 @@ class Builder extends IlluminateBuilder
      *
      * @param string $table
      * @param \Closure $callback
+     * @param string $pkCompositeOne
+     * @param string $pkCompositeTwo
      * @param string $listPartitionKey
      * @return void
      */
-    public function createListPartitioned($table, Closure $callback, string $listPartitionKey)
+    public function createListPartitioned(string $table, Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $listPartitionKey)
     {
-        $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $listPartitionKey) {
+        $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $pkCompositeOne, $pkCompositeTwo, $listPartitionKey) {
             $blueprint->createListPartitioned();
+            $blueprint->pkCompositeOne = $pkCompositeOne;
+            $blueprint->pkCompositeTwo = $pkCompositeTwo;
             $blueprint->listPartitionKey = $listPartitionKey;
 
             $callback($blueprint);
@@ -87,7 +91,7 @@ class Builder extends IlluminateBuilder
      * @param string $listPartitionValue
      * @return void
      */
-    public function attachListPartition($table, Closure $callback, string $subfixForPartition, string $listPartitionValue)
+    public function attachListPartition(string $table, Closure $callback, string $subfixForPartition, string $listPartitionValue)
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $subfixForPartition, $listPartitionValue) {
             $blueprint->attachListPartition();
@@ -103,13 +107,17 @@ class Builder extends IlluminateBuilder
      *
      * @param string $table
      * @param \Closure $callback
+     * @param string $pkCompositeOne
+     * @param string $pkCompositeTwo
      * @param string $hashPartitionKey
      * @return void
      */
-    public function createHashPartitioned($table, Closure $callback, string $hashPartitionKey)
+    public function createHashPartitioned(string $table, Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $hashPartitionKey)
     {
-        $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $hashPartitionKey) {
+        $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $pkCompositeOne, $pkCompositeTwo, $hashPartitionKey) {
             $blueprint->createHashPartitioned();
+            $blueprint->pkCompositeOne = $pkCompositeOne;
+            $blueprint->pkCompositeTwo = $pkCompositeTwo;
             $blueprint->hashPartitionKey = $hashPartitionKey;
 
             $callback($blueprint);
@@ -126,7 +134,7 @@ class Builder extends IlluminateBuilder
      * @param string $hashRemainder
      * @return void
      */
-    public function attachHashPartition($table, Closure $callback, string $subfixForPartition, string $hashModulus, string $hashRemainder)
+    public function attachHashPartition(string $table, Closure $callback, string $subfixForPartition, string $hashModulus, string $hashRemainder)
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $subfixForPartition, $hashModulus, $hashRemainder) {
             $blueprint->attachHashPartition();
