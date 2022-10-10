@@ -105,4 +105,14 @@ class PostgresGrammar extends IlluminatePostgresGrammar
             $blueprint->hashRemainder,
         )], $this->compileAutoIncrementStartingValues($blueprint))));
     }
+
+    /**
+     * Get All Range Partitioned Tables
+     * @return string
+     */
+    public function compileGetAllRangePartitionedTables()
+    {
+
+        return "select pg_class.relname as tables from pg_class inner join pg_partitioned_table on pg_class.oid = pg_partitioned_table.partrelid where pg_partitioned_table.partstrat = 'r';";
+    }
 }

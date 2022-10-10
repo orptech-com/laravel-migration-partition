@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Container\Container;
 use Illuminate\Database\Connection;
 use ORPTech\MigrationPartition\Database\Schema\Grammars\PostgresGrammar;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Schema\Builder as IlluminateBuilder;
 
 class Builder extends IlluminateBuilder
@@ -51,7 +52,7 @@ class Builder extends IlluminateBuilder
     public function initRangePartition(string $table, Closure $callback, string $subfixForPartition, string $startDate, string $endDate)
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $subfixForPartition, $startDate, $endDate) {
-            $blueprint->attachRangePartition();
+            $blueprint->initRangePartition();
             $blueprint->subfixForPartition = $subfixForPartition;
             $blueprint->startDate = $startDate;
             $blueprint->endDate = $endDate;
@@ -164,5 +165,15 @@ class Builder extends IlluminateBuilder
         }
 
         return Container::getInstance()->make(Blueprint::class, compact('table', 'callback', 'prefix'));
+    }
+
+    /**
+     * Get all the range partitioned table names
+     *
+     * @return array
+     */
+    public function getAllRangePartitionedTables ()
+    {
+        return  array_column(DB::select($this->grammar->compileGetAllRangePartitionedTables()), 'tables');
     }
 }
