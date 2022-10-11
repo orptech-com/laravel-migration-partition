@@ -84,6 +84,13 @@ class Blueprint extends IlluminateBlueprint
     public $hashRemainder;
 
     /**
+     * Column key for creating a table with list partition.
+     *
+     * @var string
+     */
+    public $partitionTableName;
+
+    /**
      * List of commands that trigger the creating function.
      *
      * @var array
@@ -117,9 +124,19 @@ class Blueprint extends IlluminateBlueprint
      *
      * @return \Illuminate\Support\Fluent
      */
-    public function initRangePartition()
+    public function createRangePartition()
     {
-        return $this->addCommand('initRangePartition');
+        return $this->addCommand('createRangePartition');
+    }
+
+    /**
+     * Attach a range partition for existing table to the partitioned table.
+     *
+     * @return \Illuminate\Support\Fluent
+     */
+    public function attachRangePartition()
+    {
+        return $this->addCommand('attachRangePartition');
     }
 
     /**
@@ -133,13 +150,23 @@ class Blueprint extends IlluminateBlueprint
     }
 
     /**
+     * Attach a range partition for existing table to the partitioned table.
+     *
+     * @return \Illuminate\Support\Fluent
+     */
+    public function attachListPartition()
+    {
+        return $this->addCommand('attachListPartition');
+    }
+
+    /**
      * Create a list partition and attach it to the partitioned table.
      *
      * @return \Illuminate\Support\Fluent
      */
-    public function initListPartition()
+    public function createListPartition()
     {
-        return $this->addCommand('initListPartition');
+        return $this->addCommand('createListPartition');
     }
 
     /**
@@ -157,9 +184,18 @@ class Blueprint extends IlluminateBlueprint
      *
      * @return \Illuminate\Support\Fluent
      */
-    public function initHashPartition()
+    public function createHashPartition()
     {
-        return $this->addCommand('initHashPartition');
+        return $this->addCommand('createHashPartition');
+    }
+    /**
+     * Attach a range partition for existing table to the partitioned table.
+     *
+     * @return \Illuminate\Support\Fluent
+     */
+    public function attachHashPartition()
+    {
+        return $this->addCommand('attachHashPartition');
     }
 
     /**
@@ -171,4 +207,35 @@ class Blueprint extends IlluminateBlueprint
     {
         return $this->addCommand('getAllRangePartitionedTables');
     }
+
+    /**
+     * Create a hash partition and attach it to the partitioned table.
+     *
+     * @return \Illuminate\Support\Fluent
+     */
+    public function getAllHashPartitionedTables()
+    {
+        return $this->addCommand('getAllHashPartitionedTables');
+    }
+
+    /**
+     * Create a hash partition and attach it to the partitioned table.
+     *
+     * @return \Illuminate\Support\Fluent
+     */
+    public function getAllListPartitionedTables()
+    {
+        return $this->addCommand('getAllListPartitionedTables');
+    }
+
+    /**
+     * Indicate that the table needs to be created with a range partition.
+     *
+     * @return \Illuminate\Support\Fluent
+     */
+    public function detachPartition()
+    {
+        return $this->addCommand('detachPartition');
+    }
+
 }

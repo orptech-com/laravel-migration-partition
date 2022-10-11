@@ -45,7 +45,7 @@ use Illuminate\Support\Facades\Schema;
 
 ### Template Usage
 
-#### Range Partition
+#### I. Range Partition
 
 ```php
 use ORPTech\MigrationPartition\Database\Schema\Blueprint;
@@ -56,7 +56,37 @@ Schema::createRangePartitioned('[YourTableNameHere]', function (Blueprint $table
 }, '[compositeKeyOne]', '[compositeKeyTwo]', '[rangePartitionKey]');
 ```
 
-#### List Partition
+##### I.I Range Partition Pre-defined Partition Adding
+
+```php
+use ORPTech\MigrationPartition\Database\Schema\Blueprint;
+use ORPTech\MigrationPartition\Support\Facades\Schema;
+
+Schema::createRangePartition('[YourPartitionedTableNameHere]', function (Blueprint $table) {}, '[subfix]', '[startDate]', '[endDate]');
+```
+
+##### I.II Range Partition Post-defined Partition Adding
+
+```php
+use ORPTech\MigrationPartition\Database\Schema\Blueprint;
+use ORPTech\MigrationPartition\Support\Facades\Schema;
+
+Schema::attachRangePartition('[YourPartitionedTableNameHere]', function (Blueprint $table) {}, '[partitionTableName]', '[startDate]', '[endDate]');
+```
+
+##### I.III Add Partition for Each Range Partitioned Tables
+
+```bash
+php artisan partition:range-init-all
+```
+- This command will create migration files for partition tables for each range partitioned tables.
+- You can create year base (or other time base) periodic tables. 
+- After this command run:
+```bash
+php artisan migrate
+```
+
+#### II. List Partition
 
 ```php
 use ORPTech\MigrationPartition\Database\Schema\Blueprint;
@@ -67,7 +97,7 @@ Schema::createListPartitioned('[YourTableNameHere]', function (Blueprint $table)
 }, '[compositeKeyOne]', '[compositeKeyTwo]', '[listPartitionKey]');
 ```
 
-#### Hash Partition
+#### III. Hash Partition
 
 ```php
 use ORPTech\MigrationPartition\Database\Schema\Blueprint;
@@ -76,6 +106,15 @@ use ORPTech\MigrationPartition\Support\Facades\Schema;
 Schema::createHashPartitioned('[YourTableNameHere]', function (Blueprint $table) {
     //...
 }, '[compositeKeyOne]', '[compositeKeyTwo]', '[hashPartitionKey]');
+```
+
+##### Partition Removing
+
+```php
+use ORPTech\MigrationPartition\Database\Schema\Blueprint;
+use ORPTech\MigrationPartition\Support\Facades\Schema;
+
+Schema::detachPartition('[YourPartitionedTableNameHere]', function (Blueprint $table) {}, '[partitionTableName]');
 ```
 
 ### Important
