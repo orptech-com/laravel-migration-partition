@@ -18,6 +18,7 @@ use RuntimeException;
  * @method static  createHashPartition(string $table, \Closure $callback, string $subfixForPartition, int $hashModulus, int $hashRemainder)
  * @method static  attachHashPartition(string $table, \Closure $callback, string $partitionTableName, int $hashModulus, int $hashRemainder)
  * @method static  getAllRangePartitionedTables()
+ * @method static  getPartitions(string $table)
  * @method static  create(string $table, \Closure $callback)
  * @method static  createcreateDatabase(string $name)
  * @method static  createdisableForeignKeyConstraints()

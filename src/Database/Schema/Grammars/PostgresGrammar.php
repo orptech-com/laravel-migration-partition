@@ -158,6 +158,20 @@ class PostgresGrammar extends IlluminatePostgresGrammar
     }
 
     /**
+     * Get partition tables for a particular partitioned table
+     * @param  string  $table
+     * @return string
+     */
+    public function compileGetPartitions(string $table)
+    {
+        return  sprintf("SELECT inhrelid::regclass as tables
+            FROM   pg_catalog.pg_inherits
+            WHERE  inhparent = '%s'::regclass;",
+            $table,
+        );
+    }
+
+    /**
      * Get All Range Partitioned Tables
      * @return string
      */

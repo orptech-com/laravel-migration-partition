@@ -61,7 +61,7 @@ class Builder extends IlluminateBuilder
             $callback($blueprint);
         }));
     }
-    
+
     /**
      * Create a new range partition on the table.
      *
@@ -227,6 +227,16 @@ class Builder extends IlluminateBuilder
         }
 
         return Container::getInstance()->make(Blueprint::class, compact('table', 'callback', 'prefix'));
+    }
+
+    /**
+     * Get all of the table names for the database.
+     * @param  string  $table
+     * @return array
+     */
+    public function getPartitions (string $table)
+    {
+        return  array_column(DB::select($this->grammar->compileGetPartitions($table)), 'tables');
     }
 
     /**

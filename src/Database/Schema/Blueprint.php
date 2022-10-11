@@ -229,6 +229,15 @@ class Blueprint extends IlluminateBlueprint
     }
 
     /**
+     * Create a hash partition and attach it to the partitioned table.
+     *
+     * @return \Illuminate\Support\Fluent
+     */
+    public function getPartitions()
+    {
+        return $this->addCommand('getPartitions');
+    }
+    /**
      * Indicate that the table needs to be created with a range partition.
      *
      * @return \Illuminate\Support\Fluent
