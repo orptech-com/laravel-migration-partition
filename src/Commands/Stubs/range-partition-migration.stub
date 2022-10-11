@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use ORPTech\MigrationPartition\Database\Schema\Blueprint;
+use ORPTech\MigrationPartition\Support\Facades\Schema;
+
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::createRangePartition('$TABLE$', function (Blueprint $table) {
+        }, '$SUBFIX$', '$START$', '$END$');
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+       Schema::detachPartition('$TABLE$', function (Blueprint $table) {
+        }, '$TABLE$_$SUBFIX$');
+
+       Schema::dropIfExists('$TABLE$_$SUBFIX$');
+    }
+};
