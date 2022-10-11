@@ -117,6 +117,12 @@ use ORPTech\MigrationPartition\Support\Facades\Schema;
 Schema::detachPartition('[YourPartitionedTableNameHere]', function (Blueprint $table) {}, '[partitionTableName]');
 ```
 
+##### List all partitions for a partitioned table
+
+```bash
+php artisan partition:list
+```
+
 ### Important
 - This package currently supports PostgreSQL Range Partitions.
 - You shouldn't define any primary keys in your migration. The package creates a composite key while setting up the table.
