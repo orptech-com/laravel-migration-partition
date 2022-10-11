@@ -7,37 +7,24 @@ use ORPTech\MigrationPartition\Database\Schema\Builder;
 use RuntimeException;
 
 /**
+ * Range partitioning related methods.
  * @method static  createRangePartitioned(string $table, \Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $rangeKey)
- * @method static  createRangePartition(string $table, \Closure $callback, string $subfixForPartition, string $startDate, string $endDate)
+ * @method static  createRangePartition(string $table, \Closure $callback, string $suffixForPartition, string $startDate, string $endDate)
  * @method static  attachRangePartition(string $table, \Closure $callback, string $partitionTableName, string $startDate, string $endDate)
- * @method static  detachPartition(string $table, \Closure $callback, string $partitionTableName)
- * @method static  createListPartitioned(string $table, \Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $listPartitionKey)
- * @method static  createListPartition(string $table, \Closure $callback, string $subfixForPartition, string $listPartitionValue)
- * @method static  attachListPartition(string $table, \Closure $callback, string $partitionTableName, string $listPartitionValue)
- * @method static  createHashPartitioned(string $table, \Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $hashPartitionKey)
- * @method static  createHashPartition(string $table, \Closure $callback, string $subfixForPartition, int $hashModulus, int $hashRemainder)
- * @method static  attachHashPartition(string $table, \Closure $callback, string $partitionTableName, int $hashModulus, int $hashRemainder)
  * @method static  getAllRangePartitionedTables()
+ * List partitioning related methods.
+ * @method static  createListPartitioned(string $table, \Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $listPartitionKey)
+ * @method static  createListPartition(string $table, \Closure $callback, string $suffixForPartition, string $listPartitionValue)
+ * @method static  attachListPartition(string $table, \Closure $callback, string $partitionTableName, string $listPartitionValue)
+ * @method static  getAllListPartitionedTables()
+ * Hash partitioning related methods.
+ * @method static  createHashPartitioned(string $table, \Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $hashPartitionKey)
+ * @method static  createHashPartition(string $table, \Closure $callback, string $suffixForPartition, int $hashModulus, int $hashRemainder)
+ * @method static  attachHashPartition(string $table, \Closure $callback, string $partitionTableName, int $hashModulus, int $hashRemainder)
+ * @method static  getAllHashPartitionedTables()
+ * General partitioning methods.
  * @method static  getPartitions(string $table)
- * @method static  create(string $table, \Closure $callback)
- * @method static  createcreateDatabase(string $name)
- * @method static  createdisableForeignKeyConstraints()
- * @method static  createdrop(string $table)
- * @method static  createdropDatabaseIfExists(string $name)
- * @method static  createdropIfExists(string $table)
- * @method static  createenableForeignKeyConstraints()
- * @method static  createrename(string $from, string $to)
- * @method static  createtable(string $table, \Closure $callback)
- * @method static  bool hasColumn(string $table, string $column)
- * @method static  bool hasColumns(string $table, array $columns)
- * @method static  bool dropColumns(string $table, array $columns)
- * @method static  void whenTableHasColumn(string $table, string $column, \Closure $callback)
- * @method static  void whenTableDoesntHaveColumn(string $table, string $column, \Closure $callback)
- * @method static  bool hasTable(string $table)
- * @method static  void defaultStringLength(int $length)
- * @method static  array getColumnListing(string $table)
- * @method static  string getColumnType(string $table, string $column)
- * @method static  void morphUsingUuids()
+ * @method static  detachPartition(string $table, \Closure $callback, string $partitionTableName)
  * @see \ORPTech\MigrationPartition\Database\Schema\Builder
  */
 class Schema extends Facade

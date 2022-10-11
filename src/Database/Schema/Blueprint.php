@@ -32,7 +32,7 @@ class Blueprint extends IlluminateBlueprint
      *
      * @var string
      */
-    public $subfixForPartition;
+    public $suffixForPartition;
 
     /**
      * Partition range key for creating a range partitioned table.
