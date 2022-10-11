@@ -100,16 +100,6 @@ class InitRangePartitionCommand extends Command
     }
 
     /**
-     * Return a singular capitalized name.
-     * @param $name
-     * @return string
-     */
-    public function getSingularClassName($name)
-    {
-        return ucwords(Pluralizer::singular($name));
-    }
-
-    /**
      * Build the directory for the class if necessary.
      *
      * @param string $path
