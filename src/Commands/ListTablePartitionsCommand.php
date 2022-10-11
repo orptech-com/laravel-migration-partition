@@ -1,11 +1,8 @@
 <?php
 
 namespace ORPTech\MigrationPartition\Commands;
+
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\Artisan;
-use ORPTech\MigrationPartition\Database\Schema\Blueprint;
-use ORPTech\MigrationPartition\Database\Schema\Builder;
 use ORPTech\MigrationPartition\Support\Facades\Schema;
 
 class ListTablePartitionsCommand extends Command
@@ -16,7 +13,7 @@ class ListTablePartitionsCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'partition:list';
+    protected $signature = 'partition:partitions';
 
 
     /**
@@ -24,15 +21,15 @@ class ListTablePartitionsCommand extends Command
      *
      * @var string
      */
-    protected $table;
+    protected string $table;
 
 
     /**
      * Execute the console command.
      *
-     * @return int
+     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $this->table = $this->ask('Table name');
         $tables = Schema::getPartitions($this->table);

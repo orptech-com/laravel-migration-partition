@@ -1,21 +1,19 @@
 <?php
 
 namespace ORPTech\MigrationPartition\Commands;
+
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\Artisan;
-use ORPTech\MigrationPartition\Database\Schema\Blueprint;
-use ORPTech\MigrationPartition\Database\Schema\Builder;
+use Illuminate\Support\Pluralizer;
 use ORPTech\MigrationPartition\Support\Facades\Schema;
 
-class PartitionRangeInitAllCommand extends Command
+class InitHashPartitionCommand extends Command
 {
-
     /**
      * Filesystem instance
      * @var Filesystem
      */
-    protected $files;
+    protected Filesystem $files;
 
     /**
      * Create a new command instance.
@@ -33,91 +31,71 @@ class PartitionRangeInitAllCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'partition:range-init-all';
+    protected $signature = 'partition:hash';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'This command will create a new series of migrations for all range partitioned table.';
 
     /**
-     * The console command description.
+     * The table name.
      *
      * @var string
      */
     protected $table;
 
     /**
-     * The console command description.
+     * The suffix for the table.
      *
      * @var string
      */
-    protected $subfix;
+    protected $suffix;
 
     /**
-     * The console command description.
+     * Modulus value for the partition.
      *
      * @var string
      */
-    protected $start;
+    protected $modulus;
 
     /**
-     * The console command description.
+     * Remainder value for the partition.
      *
      * @var string
      */
-    protected $end;
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $column;
+    protected $remainder;
 
 
     /**
-     * Execute the console command.
+     * Handler for the command.
      *
-     * @return int
      */
     public function handle()
     {
-        $this->subfix = $this->ask('Define your range name (year, mount, etc... for subfix)');
-        $this->start = $this->ask('Range start value');
-        $this->end = $this->ask('Range end value');
-        $this->column = $this->ask('Partition coloumn name');
-        $tables = Schema::getAllRangePartitionedTables();
+        $this->suffix = $this->ask('Define your table suffix');
+        $this->modulus = $this->ask('Modulus value');
+        $this->remainder = $this->ask('Remainder value');
+        $tables = Schema::getAllHashPartitionedTables();
         foreach($tables as $table){
             $this->table = $table;
             $path = $this->getSourceFilePath();
             $contents = $this->getSourceFile();
             $this->files->put($path, $contents);
-            $this->info("File : {$path} created");
-
+            $this->info("File : {$path} created.");
         }
     }
 
     /**
-     * Get the full path of generate class
+     * Get the full path of generate class.
      *
      * @return string
      */
     public function getSourceFilePath()
     {
-        return base_path('database/migrations') . '/'.now()->format('Y_m_d_His').'_cretate_partition_' . $this->table.'_'.$this->subfix . '_table.php';
-    }
-
-    /**
-     * Return the Singular Capitalize Name
-     * @param $name
-     * @return string
-     */
-    public function getSingularClassName($name)
-    {
-        return ucwords(Pluralizer::singular($name));
+        return base_path('database/migrations') . '/'.now()->format('Y_m_d_His').'_create_partition_' . $this->table.'_'.$this->suffix . '_table.php';
     }
 
     /**
@@ -129,16 +107,16 @@ class PartitionRangeInitAllCommand extends Command
     protected function makeDirectory($path)
     {
         if (!$this->files->isDirectory($path)) {
-            $this->files->makeDirectory($path, 0777, true, true);
+            $this->files->makeDirectory($path, 0755, true, true);
         }
 
         return $path;
     }
 
     /**
-     * Get the stub path and the stub variables
+     * Get the stub path and the stub variables.
      *
-     * @return bool|mixed|string
+     * @return array|false|string|string[]
      *
      */
     public function getSourceFile()
@@ -147,13 +125,13 @@ class PartitionRangeInitAllCommand extends Command
     }
 
     /**
-     * Replace the stub variables(key) with the desire value
+     * Replace the stub variables(key) with the desire value.
      *
      * @param $stub
      * @param array $stubVariables
-     * @return bool|mixed|string
+     * @return array|false|string|string[]
      */
-    public function getStubContents($stub, $stubVariables = [])
+    public function getStubContents($stub, array $stubVariables = [])
     {
         $contents = file_get_contents($stub);
 
@@ -166,18 +144,18 @@ class PartitionRangeInitAllCommand extends Command
     }
 
     /**
-     * Return the stub file path
+     * Return the stub file path.
      * @return string
      *
      */
     public function getStubPath()
     {
-        return __DIR__.'/Stubs/range-partition-migration.stub';
+        return __DIR__.'/Stubs/hash-partition-migration.stub';
     }
 
     /**
      **
-     * Map the stub variables present in stub to its value
+     * Map the stub variables present in stub to its value.
      *
      * @return array
      *
@@ -186,14 +164,9 @@ class PartitionRangeInitAllCommand extends Command
     {
         return [
             'TABLE' => $this->table,
-            'SUBFIX' => $this->subfix,
-            'START' => $this->start,
-            'END' => $this->end,
-            'COLUMN' => $this->column,
+            'SUFFIX' => $this->suffix,
+            'MODULUS' => $this->modulus,
+            'REMAINDER' => $this->remainder
         ];
     }
-
-
-
-
 }

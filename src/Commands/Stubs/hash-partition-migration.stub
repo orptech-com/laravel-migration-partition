@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::createRangePartition('$TABLE$', function (Blueprint $table) {
-        }, '$SUFFIX$', '$START$', '$END$');
+        Schema::createHashPartition('$TABLE$', function (Blueprint $table) {
+        }, '$SUFFIX$', $MODULUS$, $REMAINDER$);
     }
 
     /**

@@ -34,18 +34,21 @@ composer require orptech/laravel-migration-partition
 - SQLite 3.8.8+
 
 ## Usage
+This package currently, only supports PostgreSQL.
 
+## PostgreSQL
+PostgreSQL also known as Postgres, is a free and open-source relational database management system (RDBMS) emphasizing extensibility and SQL compliance.
 
-### PostgreSQL Range Partitioning 
+### Range Partitioning 
 Instead of importing Illuminate's Schema import this package's schema:
 ```php
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 ```
 
-### Template Usage
+## Template Usage
 
-#### I. Range Partition
+### Range Partition
 
 ```php
 use ORPTech\MigrationPartition\Database\Schema\Blueprint;
@@ -56,37 +59,25 @@ Schema::createRangePartitioned('[YourTableNameHere]', function (Blueprint $table
 }, '[compositeKeyOne]', '[compositeKeyTwo]', '[rangePartitionKey]');
 ```
 
-##### I.I Range Partition Pre-defined Partition Adding
+##### Creating a Range Partition for a Partitioned Table
 
 ```php
 use ORPTech\MigrationPartition\Database\Schema\Blueprint;
 use ORPTech\MigrationPartition\Support\Facades\Schema;
 
-Schema::createRangePartition('[YourPartitionedTableNameHere]', function (Blueprint $table) {}, '[subfix]', '[startDate]', '[endDate]');
+Schema::createRangePartition('[YourPartitionedTableNameHere]', function (Blueprint $table) {}, '[suffixForPartition]', '[startDate]', '[endDate]');
 ```
 
-##### I.II Range Partition Post-defined Partition Adding
+##### Attaching a Range Partition to a Partitioned Table
 
 ```php
 use ORPTech\MigrationPartition\Database\Schema\Blueprint;
 use ORPTech\MigrationPartition\Support\Facades\Schema;
 
-Schema::attachRangePartition('[YourPartitionedTableNameHere]', function (Blueprint $table) {}, '[partitionTableName]', '[startDate]', '[endDate]');
+Schema::attachRangePartition('[YourPartitionedTableNameHere]', function (Blueprint $table) {}, '[suffixForPartition]', '[startDate]', '[endDate]');
 ```
 
-##### I.III Add Partition for Each Range Partitioned Tables
-
-```bash
-php artisan partition:range-init-all
-```
-- This command will create migration files for partition tables for each range partitioned tables.
-- You can create year base (or other time base) periodic tables. 
-- After this command run:
-```bash
-php artisan migrate
-```
-
-#### II. List Partition
+### List Partition
 
 ```php
 use ORPTech\MigrationPartition\Database\Schema\Blueprint;
@@ -97,7 +88,25 @@ Schema::createListPartitioned('[YourTableNameHere]', function (Blueprint $table)
 }, '[compositeKeyOne]', '[compositeKeyTwo]', '[listPartitionKey]');
 ```
 
-#### III. Hash Partition
+##### Creating a List Partition for a Partitioned Table
+
+```php
+use ORPTech\MigrationPartition\Database\Schema\Blueprint;
+use ORPTech\MigrationPartition\Support\Facades\Schema;
+
+Schema::createListPartition('[YourPartitionedTableNameHere]', function (Blueprint $table) {}, '[suffixForPartition]', '[listPartitionValue]');
+```
+
+##### Attaching a List Partition to a Partitioned Table
+
+```php
+use ORPTech\MigrationPartition\Database\Schema\Blueprint;
+use ORPTech\MigrationPartition\Support\Facades\Schema;
+
+Schema::attachListPartition('[YourPartitionedTableNameHere]', function (Blueprint $table) {}, '[suffixForPartition]', '[listPartitionValue]');
+```
+
+### Hash Partition
 
 ```php
 use ORPTech\MigrationPartition\Database\Schema\Blueprint;
@@ -108,7 +117,25 @@ Schema::createHashPartitioned('[YourTableNameHere]', function (Blueprint $table)
 }, '[compositeKeyOne]', '[compositeKeyTwo]', '[hashPartitionKey]');
 ```
 
-##### Partition Removing
+##### Creating a Hash Partition for a Partitioned Table
+
+```php
+use ORPTech\MigrationPartition\Database\Schema\Blueprint;
+use ORPTech\MigrationPartition\Support\Facades\Schema;
+
+Schema::createHashPartition('[YourPartitionedTableNameHere]', function (Blueprint $table) {}, '[suffixForPartition]', '[hashModulus]', '[hashRemainder]');
+```
+
+##### Attaching a Hash Partition to a Partitioned Table
+
+```php
+use ORPTech\MigrationPartition\Database\Schema\Blueprint;
+use ORPTech\MigrationPartition\Support\Facades\Schema;
+
+Schema::attachHashPartition('[YourPartitionedTableNameHere]', function (Blueprint $table) {}, '[suffixForPartition]', '[hashModulus]', '[hashRemainder]');
+```
+
+#### Removing a Partition
 
 ```php
 use ORPTech\MigrationPartition\Database\Schema\Blueprint;
@@ -117,43 +144,36 @@ use ORPTech\MigrationPartition\Support\Facades\Schema;
 Schema::detachPartition('[YourPartitionedTableNameHere]', function (Blueprint $table) {}, '[partitionTableName]');
 ```
 
-##### List all partitions for a partitioned table
+## Commands
 
+##### New Series of Range Partition Migrations
+This command will create a new series of migrations for all range partitioned tables.
+```bash
+php artisan partition:range
+```
+
+##### New Series of List Partition Migrations
+This command will create a new series of migrations for all list partitioned tables.
 ```bash
 php artisan partition:list
+```
+
+##### New Series of Hash Partition Migrations
+This command will create a new series of migrations for all hash partitioned tables.
+```bash
+php artisan partition:hash
+```
+
+##### Listing Partitions
+This command will list all the partitioned tables.
+```bash
+php artisan partition:partitions
 ```
 
 ### Important
 - This package currently supports PostgreSQL Range Partitions.
 - You shouldn't define any primary keys in your migration. The package creates a composite key while setting up the table.
 - You need to create an initial partition to start using the tables. (PostgreSQL)
-
-#### Range Partition
-
-```php
-use ORPTech\MigrationPartition\Database\Schema\Blueprint;
-use ORPTech\MigrationPartition\Support\Facades\Schema;
-
-Schema::initRangePartition('[YourCreatedPartitionTableNameHere]', function (Blueprint $table) {}, '[SubfixForPartition]', '[StartDate]', '[EndDate]');
-```
-
-#### List Partition
-
-```php
-use ORPTech\MigrationPartition\Database\Schema\Blueprint;
-use ORPTech\MigrationPartition\Support\Facades\Schema;
-
-Schema::initListPartition('[YourCreatedPartitionTableNameHere]', function (Blueprint $table) {}, '[SubfixForPartition]', '[listPartitionValue]');
-```
-
-#### Hash Partition
-
-```php
-use ORPTech\MigrationPartition\Database\Schema\Blueprint;
-use ORPTech\MigrationPartition\Support\Facades\Schema;
-
-Schema::initHashPartition('[YourCreatedPartitionTableNameHere]', function (Blueprint $table) {}, '[SubfixForPartition]', '[hashModulus]', '[hashRemainder]');
-```
 
 ## Testing
 
