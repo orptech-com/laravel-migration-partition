@@ -4,7 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use ORPTech\MigrationPartition\Database\Schema\Blueprint;
 use ORPTech\MigrationPartition\Support\Facades\Schema;
 
-
 return new class extends Migration
 {
     /**
