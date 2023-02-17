@@ -11,7 +11,7 @@ class PostgresGrammar extends IlluminatePostgresGrammar
     /**
      * Compile a create table command with its range partitions.
      *
-     * @param  Blueprint  $blueprint
+     * @param Blueprint $blueprint
      * @param Fluent $command
      * @return array
      */
@@ -27,7 +27,7 @@ class PostgresGrammar extends IlluminatePostgresGrammar
     /**
      * Compile a create table partition command for a range partitioned table.
      *
-     * @param  Blueprint  $blueprint
+     * @param Blueprint $blueprint
      * @param Fluent $command
      * @return array
      */
@@ -45,7 +45,7 @@ class PostgresGrammar extends IlluminatePostgresGrammar
     /**
      * Compile an attach partition command for a range partitioned table.
      *
-     * @param  Blueprint  $blueprint
+     * @param Blueprint $blueprint
      * @param Fluent $command
      * @return array
      */
@@ -62,40 +62,40 @@ class PostgresGrammar extends IlluminatePostgresGrammar
     /**
      * Compile a create table command with its list partitions.
      *
-     * @param  Blueprint  $blueprint
+     * @param Blueprint $blueprint
      * @param Fluent $command
      * @return array
      */
     public function compileCreateListPartitioned(Blueprint $blueprint, Fluent $command)
     {
-        return array_values(array_filter(array_merge([sprintf('create table %s (%s) partition by list(%s)',
+        return sprintf('create table %s (%s) partition by list(%s)',
             $this->wrapTable($blueprint),
             sprintf('%s, %s', implode(', ', $this->getColumns($blueprint)), sprintf('primary key (%s, %s)', $blueprint->pkCompositeOne, $blueprint->pkCompositeTwo)),
             $blueprint->listPartitionKey
-        )], $this->compileAutoIncrementStartingValues($blueprint))));
+        );
     }
 
     /**
      * Compile a create table partition command for a list partitioned table.
      *
-     * @param  Blueprint  $blueprint
+     * @param Blueprint $blueprint
      * @param Fluent $command
      * @return array
      */
     public function compileCreateListPartition(Blueprint $blueprint, Fluent $command)
     {
-        return array_values(array_filter(array_merge([sprintf('create table %s_%s partition of %s for values in (\'%s\')',
+        return sprintf('create table %s_%s partition of %s for values in (\'%s\')',
             str_replace("\"", "", $this->wrapTable($blueprint)),
             $blueprint->suffixForPartition,
             str_replace("\"", "", $this->wrapTable($blueprint)),
             $blueprint->listPartitionValue,
-        )], $this->compileAutoIncrementStartingValues($blueprint))));
+        );
     }
 
     /**
      * Compile an attach partition command for a list partitioned table.
      *
-     * @param  Blueprint  $blueprint
+     * @param Blueprint $blueprint
      * @param Fluent $command
      * @return array
      */
@@ -111,7 +111,7 @@ class PostgresGrammar extends IlluminatePostgresGrammar
     /**
      * Compile a create table command with its hash partitions.
      *
-     * @param  Blueprint  $blueprint
+     * @param Blueprint $blueprint
      * @param Fluent $command
      * @return array
      */
@@ -127,25 +127,26 @@ class PostgresGrammar extends IlluminatePostgresGrammar
     /**
      * Compile a create table partition command for a hash partitioned table.
      *
-     * @param  Blueprint  $blueprint
+     * @param Blueprint $blueprint
      * @param Fluent $command
      * @return array
      */
     public function compileCreateHashPartition(Blueprint $blueprint, Fluent $command)
     {
-        return array_values(array_filter(array_merge([sprintf('create table %s_%s partition of %s for values with (modulus %s, remainder %s)',
+        return sprintf('create table %s_%s partition of %s for values with (modulus %s, remainder %s)',
             str_replace("\"", "", $this->wrapTable($blueprint)),
             $blueprint->suffixForPartition,
             str_replace("\"", "", $this->wrapTable($blueprint)),
             $blueprint->hashModulus,
-            $blueprint->hashRemainder,
-        )], $this->compileAutoIncrementStartingValues($blueprint))));
+            $blueprint->hashRemainder
+        );
+
     }
 
     /**
      * Compile an attach partition command for a hash partitioned table.
      *
-     * @param  Blueprint  $blueprint
+     * @param Blueprint $blueprint
      * @param Fluent $command
      * @return array
      */
@@ -161,12 +162,12 @@ class PostgresGrammar extends IlluminatePostgresGrammar
 
     /**
      * Get a list of all partitioned tables in the Database.
-     * @param  string  $table
+     * @param string $table
      * @return string
      */
     public function compileGetPartitions(string $table)
     {
-        return  sprintf("SELECT inhrelid::regclass as tables
+        return sprintf("SELECT inhrelid::regclass as tables
             FROM   pg_catalog.pg_inherits
             WHERE  inhparent = '%s'::regclass;",
             $table,
@@ -203,7 +204,7 @@ class PostgresGrammar extends IlluminatePostgresGrammar
     /**
      * Compile a detach query for a partitioned table.
      *
-     * @param  Blueprint  $blueprint
+     * @param Blueprint $blueprint
      * @param Fluent $command
      * @return array
      */
