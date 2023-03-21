@@ -27,8 +27,8 @@ composer require orptech/laravel-migration-partition
 
 ### Planned Development
 
-- MySQL
-- MariaDB
+- MySQL - Looking for Contributors
+- MariaDB - Looking for Contributors
 - SQL Server 2017+
 - SQLite 3.8.8+
 
