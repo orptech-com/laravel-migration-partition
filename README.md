@@ -9,9 +9,9 @@ This package extends Illuminate to provide partitioned table creation in migrati
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/orptech/laravel-migration-partition.svg?style=flat-square)](https://packagist.org/packages/orptech/laravel-migration-partition)
 [![Total Downloads](https://img.shields.io/packagist/dt/orptech/laravel-migration-partition.svg?style=flat-square)](https://packagist.org/packages/orptech/laravel-migration-partition)
 
-## ORPTech Software
+## ORPtech Software
 
-We are ORPTech. Here at ORPTech, we pride ourselves in ensuring that clients and services have a peaceful, safe and smooth interaction. We know how difficult it is to build trust for a service, therefore we are here to help bridge the gaps within the market via our robust applications. Please contact us for further information on how our services might help your business.
+We are ORPtech. Here at ORPtech, we pride ourselves in ensuring that clients and services have a peaceful, safe and smooth interaction. We know how difficult it is to build trust for a service, therefore we are here to help bridge the gaps within the market via our robust applications. Please contact us for further information on how our services might help your business.
 
 ## Installation
 
@@ -191,7 +191,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [ORPTech](https://github.com/orptech-com)
+- [ORPtech](https://github.com/orptech-com)
 - [Retrocket](https://github.com/retrocket)
 - [Laravel](https://github.com/laravel)
 
