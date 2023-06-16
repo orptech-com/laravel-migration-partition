@@ -1,6 +1,6 @@
 <div>
-    <p align="center"><a href="https://orptech.com" target="_blank"><img src="https://orptech.com/elements/img/orptech-logo.png" width="150"></a></p>
-    <p align="center"><a href="https://retrocket.io" target="_blank"><img src="https://www.retrocket.io/common/img/logo_white.png" width="150"></a></p>
+    <p align="center"><a href="https://orptech.com" target="_blank"><img src="https://orptech.com/assets/images/logos/orptech-logo-white.png" width="150"></a></p>
+    <p align="center"><a href="https://retrocket.io" target="_blank"><img src="https://retrocket.io/common/img/logo_white.png" width="150"></a></p>
 </div>
 
 # Laravel Partitions for Migrations
