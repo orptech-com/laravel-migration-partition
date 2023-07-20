@@ -17,9 +17,15 @@ class PostgresGrammar extends IlluminatePostgresGrammar
      */
     public function compileCreateRangePartitioned(Blueprint $blueprint, Fluent $command)
     {
+        $columns = implode(', ', $this->getColumns($blueprint));
+
+        if ($blueprint->pkCompositeOne && $blueprint->pkCompositeTwo) {
+            $columns = sprintf('%s, %s', $columns, sprintf('primary key (%s, %s)', $blueprint->pkCompositeOne, $blueprint->pkCompositeTwo));
+        }
+
         return array_values(array_filter(array_merge([sprintf('create table %s (%s) partition by range (%s)',
             $this->wrapTable($blueprint),
-            sprintf('%s, %s', implode(', ', $this->getColumns($blueprint)), sprintf('primary key (%s, %s)', $blueprint->pkCompositeOne, $blueprint->pkCompositeTwo)),
+            $columns,
             $blueprint->rangeKey
         )], $this->compileAutoIncrementStartingValues($blueprint))));
     }
