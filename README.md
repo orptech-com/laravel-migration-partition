@@ -3,7 +3,7 @@
     <p align="center"><a href="https://retrocket.io" target="_blank"><img src="https://retrocket.io/common/img/logo_white.png" width="150"></a></p>
 </div>
 
-# Database Partitions via Migrations for Laravel
+# Database Partitions via Migrations for Laravel (aka Laravel Migration Partitions)
 This package extends Illuminate to provide partitioned table creation in migrations for PostgreSQL. Support for other DMBS's will be added soon.
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/orptech/laravel-migration-partition.svg?style=flat-square)](https://packagist.org/packages/orptech/laravel-migration-partition)
