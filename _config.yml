@@ -1,2 +1,4 @@
 title: Laravel Partitions via Migrations
-remote_theme: just-the-docs/just-the-docs
+theme: jekyll-theme-minimal
+description: A Laravel that extends Illuminate to enable partitioned table creation within Laravel migrations.
+show_downloads: true
