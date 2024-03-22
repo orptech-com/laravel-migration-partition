@@ -8,7 +8,7 @@ use RuntimeException;
 
 /**
  * Range partitioning related methods.
- * @method static  createRangePartitioned(string $table, \Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $rangeKey)
+ * @method static  createRangePartitioned(string $table, \Closure $callback, ?string $pkCompositeOne = null, ?string $pkCompositeTwo = null, string $rangeKey)
  * @method static  createRangePartition(string $table, \Closure $callback, string $suffixForPartition, string $startDate, string $endDate)
  * @method static  attachRangePartition(string $table, \Closure $callback, string $partitionTableName, string $startDate, string $endDate)
  * @method static  getAllRangePartitionedTables()

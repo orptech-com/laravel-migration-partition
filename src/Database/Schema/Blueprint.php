@@ -7,16 +7,16 @@ use Illuminate\Database\Schema\Blueprint as IlluminateBlueprint;
 class Blueprint extends IlluminateBlueprint
 {
     /**
-     * Column key one for creating a composite key for a range partitioned table.
+     * Column key one for creating a composite key for a range partitioned table. Use NULL if table has no primary key
      *
-     * @var string
+     * @var string|null
      */
     public $pkCompositeOne;
 
     /**
-     * Column key two for creating a composite key for range partitioned table.
+     * Column key two for creating a composite key for range partitioned table. Use NULL if table has no primary key
      *
-     * @var string
+     * @var string|null
      */
     public $pkCompositeTwo;
 

@@ -17,11 +17,17 @@ class PostgresGrammar extends IlluminatePostgresGrammar
      */
     public function compileCreateRangePartitioned(Blueprint $blueprint, Fluent $command)
     {
+        $columns = implode(', ', $this->getColumns($blueprint));
+
+        if ($primaryKey = $this->shouldUsePrimaryKey($blueprint)) {
+            $columns = sprintf('%s, %s', $columns, sprintf('primary key (%s, %s)', $blueprint->pkCompositeOne, $blueprint->pkCompositeTwo));
+        }
+
         return array_values(array_filter(array_merge([sprintf('create table %s (%s) partition by range (%s)',
             $this->wrapTable($blueprint),
-            sprintf('%s, %s', implode(', ', $this->getColumns($blueprint)), sprintf('primary key (%s, %s)', $blueprint->pkCompositeOne, $blueprint->pkCompositeTwo)),
+            $columns,
             $blueprint->rangeKey
-        )], $this->compileAutoIncrementStartingValues($blueprint))));
+        )], $primaryKey ? $this->compileAutoIncrementStartingValues($blueprint, $command) : [])));
     }
 
     /**
@@ -39,7 +45,7 @@ class PostgresGrammar extends IlluminatePostgresGrammar
             str_replace("\"", "", $this->wrapTable($blueprint)),
             $blueprint->startDate,
             $blueprint->endDate
-        )], $this->compileAutoIncrementStartingValues($blueprint))));
+        )], $this->shouldUsePrimaryKey($blueprint) ? $this->compileAutoIncrementStartingValues($blueprint, $command) : [])));
     }
 
     /**
@@ -117,11 +123,17 @@ class PostgresGrammar extends IlluminatePostgresGrammar
      */
     public function compileCreateHashPartitioned(Blueprint $blueprint, Fluent $command)
     {
+        $columns = implode(', ', $this->getColumns($blueprint));
+
+        if ($primaryKey = $this->shouldUsePrimaryKey($blueprint)) {
+            $columns = sprintf('%s, %s', $columns, sprintf('primary key (%s, %s)', $blueprint->pkCompositeOne, $blueprint->pkCompositeTwo));
+        }
+
         return array_values(array_filter(array_merge([sprintf('create table %s (%s) partition by hash(%s)',
             $this->wrapTable($blueprint),
-            sprintf('%s, %s', implode(', ', $this->getColumns($blueprint)), sprintf('primary key (%s, %s)', $blueprint->pkCompositeOne, $blueprint->pkCompositeTwo)),
+            $columns,
             $blueprint->hashPartitionKey
-        )], $this->compileAutoIncrementStartingValues($blueprint))));
+        )], $primaryKey ? $this->compileAutoIncrementStartingValues($blueprint, $command) : [])));
     }
 
     /**
@@ -214,5 +226,16 @@ class PostgresGrammar extends IlluminatePostgresGrammar
             str_replace("\"", "", $this->wrapTable($blueprint)),
             $blueprint->partitionTableName
         );
+    }
+
+    /**
+     * Does the table have a primary key
+     *
+     * @param Blueprint $blueprint
+     * @return bool
+     */
+    public function shouldUsePrimaryKey(Blueprint $blueprint)
+    {
+        return $blueprint->pkCompositeOne && $blueprint->pkCompositeTwo;
     }
 }
