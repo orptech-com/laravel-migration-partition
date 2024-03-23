@@ -29,7 +29,7 @@ class Builder extends IlluminateBuilder
      * @return void
      * @throws BindingResolutionException
      */
-    public function createRangePartitioned(string $table, Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $rangeKey)
+    public function createRangePartitioned(string $table, Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $rangeKey): void
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $pkCompositeOne, $pkCompositeTwo, $rangeKey) {
             $blueprint->createRangePartitioned();
@@ -52,7 +52,7 @@ class Builder extends IlluminateBuilder
      * @return void
      * @throws BindingResolutionException
      */
-    public function createRangePartition(string $table, Closure $callback, string $suffixForPartition, string $startDate, string $endDate)
+    public function createRangePartition(string $table, Closure $callback, string $suffixForPartition, string $startDate, string $endDate): void
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $suffixForPartition, $startDate, $endDate) {
             $blueprint->createRangePartition();
@@ -75,7 +75,7 @@ class Builder extends IlluminateBuilder
      * @return void
      * @throws BindingResolutionException
      */
-    public function attachRangePartition(string $table, Closure $callback, string $partitionTableName, string $startDate, string $endDate)
+    public function attachRangePartition(string $table, Closure $callback, string $partitionTableName, string $startDate, string $endDate): void
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $partitionTableName, $startDate, $endDate) {
             $blueprint->attachRangePartition();
@@ -97,7 +97,7 @@ class Builder extends IlluminateBuilder
      * @return void
      * @throws BindingResolutionException
      */
-    public function createListPartitioned(string $table, Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $listPartitionKey)
+    public function createListPartitioned(string $table, Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $listPartitionKey): void
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $pkCompositeOne, $pkCompositeTwo, $listPartitionKey) {
             $blueprint->createListPartitioned();
@@ -119,7 +119,7 @@ class Builder extends IlluminateBuilder
      * @return void
      * @throws BindingResolutionException
      */
-    public function createListPartition(string $table, Closure $callback, string $suffixForPartition, string $listPartitionValue)
+    public function createListPartition(string $table, Closure $callback, string $suffixForPartition, string $listPartitionValue): void
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $suffixForPartition, $listPartitionValue) {
             $blueprint->createListPartition();
@@ -140,7 +140,7 @@ class Builder extends IlluminateBuilder
      * @return void
      * @throws BindingResolutionException
      */
-    public function attachListPartition(string $table, Closure $callback, string $partitionTableName, string $listPartitionValue)
+    public function attachListPartition(string $table, Closure $callback, string $partitionTableName, string $listPartitionValue): void
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $partitionTableName, $listPartitionValue) {
             $blueprint->attachListPartition();
@@ -161,7 +161,7 @@ class Builder extends IlluminateBuilder
      * @return void
      * @throws BindingResolutionException
      */
-    public function createHashPartitioned(string $table, Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $hashPartitionKey)
+    public function createHashPartitioned(string $table, Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $hashPartitionKey): void
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $pkCompositeOne, $pkCompositeTwo, $hashPartitionKey) {
             $blueprint->createHashPartitioned();
@@ -184,7 +184,7 @@ class Builder extends IlluminateBuilder
      * @return void
      * @throws BindingResolutionException
      */
-    public function createHashPartition(string $table, Closure $callback, string $suffixForPartition, int $hashModulus, int $hashRemainder)
+    public function createHashPartition(string $table, Closure $callback, string $suffixForPartition, int $hashModulus, int $hashRemainder): void
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $suffixForPartition, $hashModulus, $hashRemainder) {
             $blueprint->createHashPartition();
@@ -206,7 +206,7 @@ class Builder extends IlluminateBuilder
      * @return void
      * @throws BindingResolutionException
      */
-    public function attachHashPartition(string $table, Closure $callback, string $partitionTableName, int $hashModulus, int $hashRemainder)
+    public function attachHashPartition(string $table, Closure $callback, string $partitionTableName, int $hashModulus, int $hashRemainder): void
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $partitionTableName, $hashModulus, $hashRemainder) {
             $blueprint->attachHashPartition();
@@ -223,7 +223,7 @@ class Builder extends IlluminateBuilder
      * @param  string  $table
      * @return array
      */
-    public function getPartitions(string $table)
+    public function getPartitions(string $table): array
     {
         return  array_column(DB::select($this->grammar->compileGetPartitions($table)), 'tables');
     }
@@ -233,7 +233,7 @@ class Builder extends IlluminateBuilder
      *
      * @return array
      */
-    public function getAllRangePartitionedTables()
+    public function getAllRangePartitionedTables(): array
     {
         return  array_column(DB::select($this->grammar->compileGetAllRangePartitionedTables()), 'tables');
     }
@@ -243,7 +243,7 @@ class Builder extends IlluminateBuilder
      *
      * @return array
      */
-    public function getAllListPartitionedTables()
+    public function getAllListPartitionedTables(): array
     {
         return  array_column(DB::select($this->grammar->compileGetAllListPartitionedTables()), 'tables');
     }
@@ -253,7 +253,7 @@ class Builder extends IlluminateBuilder
      *
      * @return array
      */
-    public function getAllHashPartitionedTables()
+    public function getAllHashPartitionedTables(): array
     {
         return  array_column(DB::select($this->grammar->compileGetAllHashPartitionedTables()), 'tables');
     }
@@ -284,7 +284,7 @@ class Builder extends IlluminateBuilder
      * @return Closure|mixed|object|Blueprint|null
      * @throws BindingResolutionException
      */
-    protected function createBlueprint($table, Closure $callback = null)
+    protected function createBlueprint($table, Closure $callback = null): mixed
     {
         $prefix = $this->connection->getConfig('prefix_indexes')
             ? $this->connection->getConfig('prefix')
