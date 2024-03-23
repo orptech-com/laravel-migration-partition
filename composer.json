@@ -1,9 +1,14 @@
 {
     "name": "orptech/laravel-migration-partition",
-    "description": "Laravel extensions for creating migrations with partitions.",
+    "description": "Laravel extensions that extends Illuminate to enable partitioned table creation within Laravel migrations.",
     "keywords": [
-        "ORPTech",
+        "ORPtech",
         "laravel",
+        "migrations",
+        "database",
+        "postgres",
+        "postgre",
+        "psql",
         "laravel-migration-partition"
     ],
     "homepage": "https://github.com/orptech/laravel-migration-partition",
@@ -12,31 +17,30 @@
         {
             "name": "Arda Karaderi",
             "email": "info@orptech.com",
-            "role": "Developer"
+            "role": "Software Engineer"
         }
     ],
     "require": {
-        "php": "^8.1",
-        "doctrine/dbal": "^3.4",
-        "illuminate/contracts": "^10.0",
-        "illuminate/database": "^10.0",
-        "illuminate/support": "^10.0",
-        "illuminate/console":"^10.0",
-        "illuminate/filesystem":"^10.0",
-        "spatie/laravel-package-tools": "^1.13.0"
+        "php": "^8.2",
+        "illuminate/contracts": "^11.0",
+        "illuminate/database": "^11.0",
+        "illuminate/support": "^11.0",
+        "illuminate/console":"^11.0",
+        "illuminate/filesystem":"^11.0",
+        "spatie/laravel-package-tools": "^1.16.0"
     },
     "require-dev": {
-        "laravel/pint": "^1.0",
-        "nunomaduro/collision": "^6.0",
-        "nunomaduro/larastan": "^2.0.1",
-        "orchestra/testbench": "^8.0",
-        "pestphp/pest": "^1.21",
-        "pestphp/pest-plugin-laravel": "^1.1",
-        "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan-deprecation-rules": "^1.0",
-        "phpstan/phpstan-phpunit": "^1.0",
-        "phpunit/phpunit": "^9.5",
-        "spatie/laravel-ray": "^1.26"
+        "laravel/pint": "^1.14",
+        "nunomaduro/collision": "^8.1.1||^7.10.0",
+        "larastan/larastan": "^2.9",
+        "orchestra/testbench": "^9.0.0||^8.22.0",
+        "pestphp/pest": "^2.34",
+        "pestphp/pest-plugin-arch": "^2.7",
+        "pestphp/pest-plugin-laravel": "^2.3",
+        "phpstan/extension-installer": "^1.3",
+        "phpstan/phpstan-deprecation-rules": "^1.1",
+        "phpstan/phpstan-phpunit": "^1.3",
+        "spatie/laravel-ray": "^1.35"
     },
     "autoload": {
         "psr-4": {
