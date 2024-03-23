@@ -15,13 +15,13 @@ class PostgresGrammar extends IlluminatePostgresGrammar
      * @param Fluent $command
      * @return array
      */
-    public function compileCreateRangePartitioned(Blueprint $blueprint, Fluent $command)
+    public function compileCreateRangePartitioned(Blueprint $blueprint, Fluent $command): array
     {
         return array_values(array_filter(array_merge([sprintf('create table %s (%s) partition by range (%s)',
             $this->wrapTable($blueprint),
             sprintf('%s, %s', implode(', ', $this->getColumns($blueprint)), sprintf('primary key (%s, %s)', $blueprint->pkCompositeOne, $blueprint->pkCompositeTwo)),
             $blueprint->rangeKey
-        )], $this->compileAutoIncrementStartingValues($blueprint))));
+        )], [$this->compileAutoIncrementStartingValues($blueprint, $command)])));
     }
 
     /**
@@ -31,7 +31,7 @@ class PostgresGrammar extends IlluminatePostgresGrammar
      * @param Fluent $command
      * @return array
      */
-    public function compileCreateRangePartition(Blueprint $blueprint, Fluent $command)
+    public function compileCreateRangePartition(Blueprint $blueprint, Fluent $command): array
     {
         return array_values(array_filter(array_merge([sprintf('create table %s_%s partition of %s for values from (\'%s\') to (\'%s\')',
             str_replace("\"", "", $this->wrapTable($blueprint)),
@@ -39,7 +39,23 @@ class PostgresGrammar extends IlluminatePostgresGrammar
             str_replace("\"", "", $this->wrapTable($blueprint)),
             $blueprint->startDate,
             $blueprint->endDate
-        )], $this->compileAutoIncrementStartingValues($blueprint))));
+        )], [$this->compileAutoIncrementStartingValues($blueprint, $command)])));
+    }
+
+    /**
+     * Compile a create table command with its list partitions.
+     *
+     * @param Blueprint $blueprint
+     * @param Fluent $command
+     * @return string
+     */
+    public function compileCreateListPartitioned(Blueprint $blueprint, Fluent $command): string
+    {
+        return sprintf('create table %s (%s) partition by list(%s)',
+            $this->wrapTable($blueprint),
+            sprintf('%s, %s', implode(', ', $this->getColumns($blueprint)), sprintf('primary key (%s, %s)', $blueprint->pkCompositeOne, $blueprint->pkCompositeTwo)),
+            $blueprint->listPartitionKey
+        );
     }
 
     /**
@@ -47,9 +63,9 @@ class PostgresGrammar extends IlluminatePostgresGrammar
      *
      * @param Blueprint $blueprint
      * @param Fluent $command
-     * @return array
+     * @return string
      */
-    public function compileAttachRangePartition(Blueprint $blueprint, Fluent $command)
+    public function compileAttachRangePartition(Blueprint $blueprint, Fluent $command): string
     {
         return sprintf('ALTER table %s attach partition %s for values from (\'%s\') to (\'%s\')',
             str_replace("\"", "", $this->wrapTable($blueprint)),
@@ -60,29 +76,13 @@ class PostgresGrammar extends IlluminatePostgresGrammar
     }
 
     /**
-     * Compile a create table command with its list partitions.
-     *
-     * @param Blueprint $blueprint
-     * @param Fluent $command
-     * @return array
-     */
-    public function compileCreateListPartitioned(Blueprint $blueprint, Fluent $command)
-    {
-        return sprintf('create table %s (%s) partition by list(%s)',
-            $this->wrapTable($blueprint),
-            sprintf('%s, %s', implode(', ', $this->getColumns($blueprint)), sprintf('primary key (%s, %s)', $blueprint->pkCompositeOne, $blueprint->pkCompositeTwo)),
-            $blueprint->listPartitionKey
-        );
-    }
-
-    /**
      * Compile a create table partition command for a list partitioned table.
      *
      * @param Blueprint $blueprint
      * @param Fluent $command
-     * @return array
+     * @return string
      */
-    public function compileCreateListPartition(Blueprint $blueprint, Fluent $command)
+    public function compileCreateListPartition(Blueprint $blueprint, Fluent $command): string
     {
         return sprintf('create table %s_%s partition of %s for values in (\'%s\')',
             str_replace("\"", "", $this->wrapTable($blueprint)),
@@ -97,14 +97,32 @@ class PostgresGrammar extends IlluminatePostgresGrammar
      *
      * @param Blueprint $blueprint
      * @param Fluent $command
-     * @return array
+     * @return string
      */
-    public function compileAttachListPartition(Blueprint $blueprint, Fluent $command)
+    public function compileAttachListPartition(Blueprint $blueprint, Fluent $command): string
     {
         return sprintf('alter table %s partition of %s for values in (\'%s\')',
             str_replace("\"", "", $this->wrapTable($blueprint)),
             $blueprint->partitionTableName,
             $blueprint->listPartitionValue,
+        );
+    }
+
+    /**
+     * Compile a create table partition command for a hash partitioned table.
+     *
+     * @param Blueprint $blueprint
+     * @param Fluent $command
+     * @return string
+     */
+    public function compileCreateHashPartition(Blueprint $blueprint, Fluent $command): string
+    {
+        return sprintf('create table %s_%s partition of %s for values with (modulus %s, remainder %s)',
+            str_replace("\"", "", $this->wrapTable($blueprint)),
+            $blueprint->suffixForPartition,
+            str_replace("\"", "", $this->wrapTable($blueprint)),
+            $blueprint->hashModulus,
+            $blueprint->hashRemainder
         );
     }
 
@@ -115,32 +133,13 @@ class PostgresGrammar extends IlluminatePostgresGrammar
      * @param Fluent $command
      * @return array
      */
-    public function compileCreateHashPartitioned(Blueprint $blueprint, Fluent $command)
+    public function compileCreateHashPartitioned(Blueprint $blueprint, Fluent $command): array
     {
         return array_values(array_filter(array_merge([sprintf('create table %s (%s) partition by hash(%s)',
             $this->wrapTable($blueprint),
             sprintf('%s, %s', implode(', ', $this->getColumns($blueprint)), sprintf('primary key (%s, %s)', $blueprint->pkCompositeOne, $blueprint->pkCompositeTwo)),
             $blueprint->hashPartitionKey
-        )], $this->compileAutoIncrementStartingValues($blueprint))));
-    }
-
-    /**
-     * Compile a create table partition command for a hash partitioned table.
-     *
-     * @param Blueprint $blueprint
-     * @param Fluent $command
-     * @return array
-     */
-    public function compileCreateHashPartition(Blueprint $blueprint, Fluent $command)
-    {
-        return sprintf('create table %s_%s partition of %s for values with (modulus %s, remainder %s)',
-            str_replace("\"", "", $this->wrapTable($blueprint)),
-            $blueprint->suffixForPartition,
-            str_replace("\"", "", $this->wrapTable($blueprint)),
-            $blueprint->hashModulus,
-            $blueprint->hashRemainder
-        );
-
+        )], [$this->compileAutoIncrementStartingValues($blueprint, $command)])));
     }
 
     /**
@@ -148,9 +147,9 @@ class PostgresGrammar extends IlluminatePostgresGrammar
      *
      * @param Blueprint $blueprint
      * @param Fluent $command
-     * @return array
+     * @return string
      */
-    public function compileAttachHashPartition(Blueprint $blueprint, Fluent $command)
+    public function compileAttachHashPartition(Blueprint $blueprint, Fluent $command): string
     {
         return sprintf('alter table %s partition of %s for values with (modulus %s, remainder %s)',
             str_replace("\"", "", $this->wrapTable($blueprint)),
@@ -165,7 +164,7 @@ class PostgresGrammar extends IlluminatePostgresGrammar
      * @param string $table
      * @return string
      */
-    public function compileGetPartitions(string $table)
+    public function compileGetPartitions(string $table): string
     {
         return sprintf("SELECT inhrelid::regclass as tables
             FROM   pg_catalog.pg_inherits
@@ -178,7 +177,7 @@ class PostgresGrammar extends IlluminatePostgresGrammar
      * Get all range partitioned tables.
      * @return string
      */
-    public function compileGetAllRangePartitionedTables()
+    public function compileGetAllRangePartitionedTables(): string
     {
         return "select pg_class.relname as tables from pg_class inner join pg_partitioned_table on pg_class.oid = pg_partitioned_table.partrelid where pg_partitioned_table.partstrat = 'r';";
     }
@@ -187,7 +186,7 @@ class PostgresGrammar extends IlluminatePostgresGrammar
      * Get all list partitioned tables.
      * @return string
      */
-    public function compileGetAllListPartitionedTables()
+    public function compileGetAllListPartitionedTables(): string
     {
         return "select pg_class.relname as tables from pg_class inner join pg_partitioned_table on pg_class.oid = pg_partitioned_table.partrelid where pg_partitioned_table.partstrat = 'l';";
     }
@@ -196,7 +195,7 @@ class PostgresGrammar extends IlluminatePostgresGrammar
      * Get all hash partitioned tables.
      * @return string
      */
-    public function compileGetAllHashPartitionedTables()
+    public function compileGetAllHashPartitionedTables(): string
     {
         return "select pg_class.relname as tables from pg_class inner join pg_partitioned_table on pg_class.oid = pg_partitioned_table.partrelid where pg_partitioned_table.partstrat = 'h';";
     }
@@ -206,9 +205,9 @@ class PostgresGrammar extends IlluminatePostgresGrammar
      *
      * @param Blueprint $blueprint
      * @param Fluent $command
-     * @return array
+     * @return string
      */
-    public function compileDetachPartition(Blueprint $blueprint, Fluent $command)
+    public function compileDetachPartition(Blueprint $blueprint, Fluent $command): string
     {
         return sprintf('alter table %s detach partition %s',
             str_replace("\"", "", $this->wrapTable($blueprint)),
