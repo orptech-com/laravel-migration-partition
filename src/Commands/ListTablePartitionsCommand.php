@@ -21,6 +21,13 @@ class ListTablePartitionsCommand extends Command
      *
      * @var string
      */
+    protected $description = 'Lists partitions for a table.';
+
+    /**
+     * The target table.
+     *
+     * @var string
+     */
     protected string $table;
 
 
