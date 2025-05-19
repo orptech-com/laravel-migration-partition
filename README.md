@@ -58,6 +58,8 @@ Schema::createRangePartitioned('[YourTableNameHere]', function (Blueprint $table
 }, '[compositeKeyOne]', '[compositeKeyTwo]', '[rangePartitionKey]');
 ```
 
+Enter null for `[compositeKeyOne]`, `[compositeKeyTwo]` if you don't need a primary key.
+
 ##### Creating a Range Partition for a Partitioned Table
 
 ```php
@@ -87,6 +89,8 @@ Schema::createListPartitioned('[YourTableNameHere]', function (Blueprint $table)
 }, '[compositeKeyOne]', '[compositeKeyTwo]', '[listPartitionKey]');
 ```
 
+Enter null for `[compositeKeyOne]`, `[compositeKeyTwo]` if you don't need a primary key.
+
 ##### Creating a List Partition for a Partitioned Table
 
 ```php
@@ -115,6 +119,8 @@ Schema::createHashPartitioned('[YourTableNameHere]', function (Blueprint $table)
     //...
 }, '[compositeKeyOne]', '[compositeKeyTwo]', '[hashPartitionKey]');
 ```
+
+Enter null for `[compositeKeyOne]`, `[compositeKeyTwo]` if you don't need a primary key.
 
 ##### Creating a Hash Partition for a Partitioned Table
 
