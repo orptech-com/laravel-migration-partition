@@ -13,7 +13,7 @@ class Blueprint extends IlluminateBlueprint
      *
      * @var string|null
      */
-    public string $pkCompositeOne;
+    public ?string $pkCompositeOne;
 
     /**
      * Column key two for creating a composite key for range partitioned table.
@@ -21,7 +21,7 @@ class Blueprint extends IlluminateBlueprint
      *
      * @var string|null
      */
-    public string $pkCompositeTwo;
+    public ?string $pkCompositeTwo;
 
     /**
      * Partition range key for creating a range partitioned table.
