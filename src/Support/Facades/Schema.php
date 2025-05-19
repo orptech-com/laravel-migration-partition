@@ -8,17 +8,17 @@ use RuntimeException;
 
 /**
  * Range partitioning related methods.
- * @method static  createRangePartitioned(string $table, \Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $rangeKey)
+ * @method static  createRangePartitioned(string $table, \Closure $callback, ?string $pkCompositeOne, ?string $pkCompositeTwo, string $rangeKey)
  * @method static  createRangePartition(string $table, \Closure $callback, string $suffixForPartition, string $startDate, string $endDate)
  * @method static  attachRangePartition(string $table, \Closure $callback, string $partitionTableName, string $startDate, string $endDate)
  * @method static  getAllRangePartitionedTables()
  * List partitioning related methods.
- * @method static  createListPartitioned(string $table, \Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $listPartitionKey)
+ * @method static  createListPartitioned(string $table, \Closure $callback, ?string $pkCompositeOne, ?string $pkCompositeTwo, string $listPartitionKey)
  * @method static  createListPartition(string $table, \Closure $callback, string $suffixForPartition, string $listPartitionValue)
  * @method static  attachListPartition(string $table, \Closure $callback, string $partitionTableName, string $listPartitionValue)
  * @method static  getAllListPartitionedTables()
  * Hash partitioning related methods.
- * @method static  createHashPartitioned(string $table, \Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $hashPartitionKey)
+ * @method static  createHashPartitioned(string $table, \Closure $callback, ?string $pkCompositeOne, ?string $pkCompositeTwo, string $hashPartitionKey)
  * @method static  createHashPartition(string $table, \Closure $callback, string $suffixForPartition, int $hashModulus, int $hashRemainder)
  * @method static  attachHashPartition(string $table, \Closure $callback, string $partitionTableName, int $hashModulus, int $hashRemainder)
  * @method static  getAllHashPartitionedTables()
