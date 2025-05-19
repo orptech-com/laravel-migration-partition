@@ -13,6 +13,12 @@ This package extends Illuminate to provide partitioned table creation in migrati
 
 We are ORPtech. Here at ORPtech, we pride ourselves in ensuring that clients and services have a peaceful, safe and smooth interaction. We know how difficult it is to build trust for a service, therefore we are here to help bridge the gaps within the market via our robust applications. Please contact us for further information on how our services might help your business.
 
+## Version Matching
+| **Package Version** | **Supported**  |
+|---------------------|------------|
+| 11.x.x              | **Laravel 11** |
+| 12.x.x              | **Laravel 12** |
+
 ## Installation
 
 You can install the package via composer:
@@ -58,6 +64,8 @@ Schema::createRangePartitioned('[YourTableNameHere]', function (Blueprint $table
 }, '[compositeKeyOne]', '[compositeKeyTwo]', '[rangePartitionKey]');
 ```
 
+Enter null for `[compositeKeyOne]`, `[compositeKeyTwo]` if you don't need a primary key.
+
 ##### Creating a Range Partition for a Partitioned Table
 
 ```php
@@ -87,6 +95,8 @@ Schema::createListPartitioned('[YourTableNameHere]', function (Blueprint $table)
 }, '[compositeKeyOne]', '[compositeKeyTwo]', '[listPartitionKey]');
 ```
 
+Enter null for `[compositeKeyOne]`, `[compositeKeyTwo]` if you don't need a primary key.
+
 ##### Creating a List Partition for a Partitioned Table
 
 ```php
@@ -115,6 +125,8 @@ Schema::createHashPartitioned('[YourTableNameHere]', function (Blueprint $table)
     //...
 }, '[compositeKeyOne]', '[compositeKeyTwo]', '[hashPartitionKey]');
 ```
+
+Enter null for `[compositeKeyOne]`, `[compositeKeyTwo]` if you don't need a primary key.
 
 ##### Creating a Hash Partition for a Partitioned Table
 

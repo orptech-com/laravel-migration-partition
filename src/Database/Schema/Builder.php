@@ -23,13 +23,13 @@ class Builder extends IlluminateBuilder
      *
      * @param string $table
      * @param Closure $callback
-     * @param string $pkCompositeOne
-     * @param string $pkCompositeTwo
+     * @param string|null $pkCompositeOne
+     * @param string|null $pkCompositeTwo
      * @param string $rangeKey
      * @return void
      * @throws BindingResolutionException
      */
-    public function createRangePartitioned(string $table, Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $rangeKey): void
+    public function createRangePartitioned(string $table, Closure $callback, ?string $pkCompositeOne, ?string $pkCompositeTwo, string $rangeKey): void
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $pkCompositeOne, $pkCompositeTwo, $rangeKey) {
             $blueprint->createRangePartitioned();
@@ -91,13 +91,13 @@ class Builder extends IlluminateBuilder
      *
      * @param string $table
      * @param Closure $callback
-     * @param string $pkCompositeOne
-     * @param string $pkCompositeTwo
+     * @param string|null $pkCompositeOne
+     * @param string|null $pkCompositeTwo
      * @param string $listPartitionKey
      * @return void
      * @throws BindingResolutionException
      */
-    public function createListPartitioned(string $table, Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $listPartitionKey): void
+    public function createListPartitioned(string $table, Closure $callback, ?string $pkCompositeOne, ?string $pkCompositeTwo, string $listPartitionKey): void
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $pkCompositeOne, $pkCompositeTwo, $listPartitionKey) {
             $blueprint->createListPartitioned();
@@ -155,13 +155,13 @@ class Builder extends IlluminateBuilder
      *
      * @param string $table
      * @param Closure $callback
-     * @param string $pkCompositeOne
-     * @param string $pkCompositeTwo
+     * @param string|null $pkCompositeOne
+     * @param string|null $pkCompositeTwo
      * @param string $hashPartitionKey
      * @return void
      * @throws BindingResolutionException
      */
-    public function createHashPartitioned(string $table, Closure $callback, string $pkCompositeOne, string $pkCompositeTwo, string $hashPartitionKey): void
+    public function createHashPartitioned(string $table, Closure $callback, ?string $pkCompositeOne, ?string $pkCompositeTwo, string $hashPartitionKey): void
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $pkCompositeOne, $pkCompositeTwo, $hashPartitionKey) {
             $blueprint->createHashPartitioned();

@@ -9,17 +9,19 @@ class Blueprint extends IlluminateBlueprint
 {
     /**
      * Column key one for creating a composite key for a range partitioned table.
+     * No not define a key, feel free to input null.
      *
-     * @var string
+     * @var string|null
      */
-    public string $pkCompositeOne;
+    public ?string $pkCompositeOne;
 
     /**
      * Column key two for creating a composite key for range partitioned table.
+     * No not define a key, feel free to input null.
      *
-     * @var string
+     * @var string|null
      */
-    public string $pkCompositeTwo;
+    public ?string $pkCompositeTwo;
 
     /**
      * Partition range key for creating a range partitioned table.
