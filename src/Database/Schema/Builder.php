@@ -15,7 +15,7 @@ class Builder extends IlluminateBuilder
     public function __construct(Connection $connection)
     {
         parent::__construct($connection);
-        $this->grammar = new PostgresGrammar();
+        $this->grammar = new PostgresGrammar($connection);
     }
 
     /**
@@ -284,7 +284,7 @@ class Builder extends IlluminateBuilder
      * @return Closure|mixed|object|Blueprint|null
      * @throws BindingResolutionException
      */
-    protected function createBlueprint($table, Closure $callback = null): mixed
+    protected function createBlueprint($table, ?Closure $callback = null): mixed
     {
         $prefix = $this->connection->getConfig('prefix_indexes')
             ? $this->connection->getConfig('prefix')
