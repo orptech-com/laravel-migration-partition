@@ -12,10 +12,17 @@ use Illuminate\Database\Schema\Builder as IlluminateBuilder;
 
 class Builder extends IlluminateBuilder
 {
+    /**
+     * The schema grammar instance.
+     *
+     * @var PostgresGrammar
+     */
+    protected $grammar;
+
     public function __construct(Connection $connection)
     {
+        $connection->setSchemaGrammar(new PostgresGrammar($connection));
         parent::__construct($connection);
-        $this->grammar = new PostgresGrammar($connection);
     }
 
     /**
@@ -286,15 +293,13 @@ class Builder extends IlluminateBuilder
      */
     protected function createBlueprint($table, ?Closure $callback = null): mixed
     {
-        $prefix = $this->connection->getConfig('prefix_indexes')
-            ? $this->connection->getConfig('prefix')
-            : '';
+        $connection = $this->connection;
 
         if (isset($this->resolver)) {
-            return call_user_func($this->resolver, $table, $callback, $prefix);
+            return call_user_func($this->resolver, $connection, $table, $callback);
         }
 
-        return Container::getInstance()->make(Blueprint::class, compact('table', 'callback', 'prefix'));
+        return Container::getInstance()->make(Blueprint::class, compact('connection', 'table', 'callback'));
     }
 
 }

@@ -1,0 +1,67 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Argument of an invalid type ORPTech\\MigrationPartition\\Support\\Facades\\Schema supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: src/Commands/InitHashPartitionCommand.php
+
+		-
+			message: '#^Static call to instance method ORPTech\\MigrationPartition\\Support\\Facades\\Schema\:\:getAllHashPartitionedTables\(\)\.$#'
+			identifier: method.staticCall
+			count: 1
+			path: src/Commands/InitHashPartitionCommand.php
+
+		-
+			message: '#^Argument of an invalid type ORPTech\\MigrationPartition\\Support\\Facades\\Schema supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: src/Commands/InitListPartitionCommand.php
+
+		-
+			message: '#^Static call to instance method ORPTech\\MigrationPartition\\Support\\Facades\\Schema\:\:getAllListPartitionedTables\(\)\.$#'
+			identifier: method.staticCall
+			count: 1
+			path: src/Commands/InitListPartitionCommand.php
+
+		-
+			message: '#^Argument of an invalid type ORPTech\\MigrationPartition\\Support\\Facades\\Schema supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: src/Commands/InitRangePartitionCommand.php
+
+		-
+			message: '#^Static call to instance method ORPTech\\MigrationPartition\\Support\\Facades\\Schema\:\:getAllRangePartitionedTables\(\)\.$#'
+			identifier: method.staticCall
+			count: 1
+			path: src/Commands/InitRangePartitionCommand.php
+
+		-
+			message: '#^Argument of an invalid type ORPTech\\MigrationPartition\\Support\\Facades\\Schema supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: src/Commands/ListTablePartitionsCommand.php
+
+		-
+			message: '#^Static call to instance method ORPTech\\MigrationPartition\\Support\\Facades\\Schema\:\:getPartitions\(\)\.$#'
+			identifier: method.staticCall
+			count: 1
+			path: src/Commands/ListTablePartitionsCommand.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Support\\Fluent\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Database/Schema/Blueprint.php
+
+		-
+			message: '#^Property Illuminate\\Database\\Schema\\Builder\:\:\$resolver \(Closure\) in isset\(\) is not nullable\.$#'
+			identifier: isset.property
+			count: 1
+			path: src/Database/Schema/Builder.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: src/Database/Schema/Builder.php
