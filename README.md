@@ -18,6 +18,7 @@ We are ORPtech. Here at ORPtech, we pride ourselves in ensuring that clients and
 |---------------------|------------|
 | 11.x.x              | **Laravel 11** |
 | 12.x.x              | **Laravel 12** |
+| 13.x.x              | **Laravel 13** |
 
 ## Installation
 
