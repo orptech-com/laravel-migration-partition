@@ -17,19 +17,14 @@ trait CompilesPartitionQueries
      */
     public function compileCreateRangePartitioned(Blueprint $blueprint, Fluent $command): array
     {
-        $columns = implode(', ', $this->getColumns($blueprint));
+        $columns = $this->getPartitionedTableColumns($blueprint);
 
-        if ($primaryKey = $this->shouldUsePrimaryKey($blueprint))
-        {
-            $columns = sprintf('%s, %s', $columns, sprintf('primary key (%s, %s)', $blueprint->pkCompositeOne, $blueprint->pkCompositeTwo));
-        }
-
-        return array_values(array_filter(array_merge([sprintf(
+        return [sprintf(
             'create table %s (%s) partition by range (%s)',
             $this->wrapTable($blueprint),
             $columns,
             $blueprint->rangeKey
-        )], $primaryKey ? $this->compileAutoIncrementStartingValues($blueprint, $command) : [])));
+        )];
     }
 
     /**
@@ -42,14 +37,14 @@ trait CompilesPartitionQueries
      */
     public function compileCreateRangePartition(Blueprint $blueprint, Fluent $command): array
     {
-        return array_values(array_filter(array_merge([sprintf(
+        return [sprintf(
             'create table %s_%s partition of %s for values from (\'%s\') to (\'%s\')',
             str_replace("\"", "", $this->wrapTable($blueprint)),
             $blueprint->suffixForPartition,
             str_replace("\"", "", $this->wrapTable($blueprint)),
             $blueprint->startDate,
             $blueprint->endDate
-        )], $this->shouldUsePrimaryKey($blueprint) ? $this->compileAutoIncrementStartingValues($blueprint, $command) : [])));
+        )];
     }
 
     /**
@@ -62,12 +57,7 @@ trait CompilesPartitionQueries
      */
     public function compileCreateListPartitioned(Blueprint $blueprint, Fluent $command): string
     {
-        $columns = implode(', ', $this->getColumns($blueprint));
-
-        if ($this->shouldUsePrimaryKey($blueprint))
-        {
-            $columns = sprintf('%s, %s', $columns, sprintf('primary key (%s, %s)', $blueprint->pkCompositeOne, $blueprint->pkCompositeTwo));
-        }
+        $columns = $this->getPartitionedTableColumns($blueprint);
 
         return sprintf(
             'create table %s (%s) partition by list(%s)',
@@ -126,7 +116,7 @@ trait CompilesPartitionQueries
     public function compileAttachListPartition(Blueprint $blueprint, Fluent $command): string
     {
         return sprintf(
-            'alter table %s partition of %s for values in (\'%s\')',
+            'alter table %s attach partition %s for values in (\'%s\')',
             str_replace("\"", "", $this->wrapTable($blueprint)),
             $blueprint->partitionTableName,
             $blueprint->listPartitionValue,
@@ -163,19 +153,14 @@ trait CompilesPartitionQueries
      */
     public function compileCreateHashPartitioned(Blueprint $blueprint, Fluent $command): array
     {
-        $columns = implode(', ', $this->getColumns($blueprint));
+        $columns = $this->getPartitionedTableColumns($blueprint);
 
-        if ($primaryKey = $this->shouldUsePrimaryKey($blueprint))
-        {
-            $columns = sprintf('%s, %s', $columns, sprintf('primary key (%s, %s)', $blueprint->pkCompositeOne, $blueprint->pkCompositeTwo));
-        }
-
-        return array_values(array_filter(array_merge([sprintf(
+        return [sprintf(
             'create table %s (%s) partition by hash(%s)',
             $this->wrapTable($blueprint),
             $columns,
             $blueprint->hashPartitionKey
-        )], $primaryKey ? $this->compileAutoIncrementStartingValues($blueprint, $command) : [])));
+        )];
     }
 
     /**
@@ -189,7 +174,7 @@ trait CompilesPartitionQueries
     public function compileAttachHashPartition(Blueprint $blueprint, Fluent $command): string
     {
         return sprintf(
-            'alter table %s partition of %s for values with (modulus %s, remainder %s)',
+            'alter table %s attach partition %s for values with (modulus %s, remainder %s)',
             str_replace("\"", "", $this->wrapTable($blueprint)),
             $blueprint->partitionTableName,
             $blueprint->hashModulus,
@@ -259,6 +244,26 @@ trait CompilesPartitionQueries
             str_replace("\"", "", $this->wrapTable($blueprint)),
             $blueprint->partitionTableName
         );
+    }
+
+    /**
+     * Get the column definitions of a partitioned table, including its composite primary key.
+     *
+     * @param Blueprint $blueprint
+     *
+     * @return string
+     */
+    protected function getPartitionedTableColumns(Blueprint $blueprint): string
+    {
+        if (! $this->shouldUsePrimaryKey($blueprint))
+        {
+            return implode(', ', $this->getColumns($blueprint));
+        }
+
+        // Registered as a command so auto incrementing columns don't declare a primary key of their own.
+        $blueprint->primary([$blueprint->pkCompositeOne, $blueprint->pkCompositeTwo])->shouldBeSkipped = true;
+
+        return sprintf('%s, primary key (%s, %s)', implode(', ', $this->getColumns($blueprint)), $blueprint->pkCompositeOne, $blueprint->pkCompositeTwo);
     }
 
     /**

@@ -13,7 +13,7 @@ class Blueprint extends IlluminateBlueprint
      *
      * @var string|null
      */
-    public ?string $pkCompositeOne;
+    public ?string $pkCompositeOne = null;
 
     /**
      * Column key two for creating a composite key for range partitioned table.
@@ -21,7 +21,7 @@ class Blueprint extends IlluminateBlueprint
      *
      * @var string|null
      */
-    public ?string $pkCompositeTwo;
+    public ?string $pkCompositeTwo = null;
 
     /**
      * Partition range key for creating a range partitioned table.
@@ -40,16 +40,16 @@ class Blueprint extends IlluminateBlueprint
     /**
      * Partition range key for creating a range partitioned table.
      *
-     * @var string
+     * @var string|int
      */
-    public string $startDate;
+    public string|int $startDate;
 
     /**
      * Partition range key for creating a range partitioned table.
      *
-     * @var string
+     * @var string|int
      */
-    public string $endDate;
+    public string|int $endDate;
 
     /**
      * Column key for creating a table with list partition.
@@ -61,9 +61,9 @@ class Blueprint extends IlluminateBlueprint
     /**
      * Column key for creating list partitions.
      *
-     * @var string
+     * @var string|int
      */
-    public string $listPartitionValue;
+    public string|int $listPartitionValue;
 
     /**
      * Column key for creating a table with hash partition.

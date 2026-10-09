@@ -4,7 +4,7 @@
 </div>
 
 # Database Partitions via Migrations for Laravel (aka Laravel Migration Partitions)
-This package extends Illuminate to provide partitioned table creation in migrations for PostgreSQL. Support for other DMBS's will be added soon.
+This package extends Illuminate to provide partitioned table creation in migrations for PostgreSQL, MySQL and MariaDB.
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/orptech/laravel-migration-partition.svg?style=flat-square)](https://packagist.org/packages/orptech/laravel-migration-partition)
 [![Total Downloads](https://img.shields.io/packagist/dt/orptech/laravel-migration-partition.svg?style=flat-square)](https://packagist.org/packages/orptech/laravel-migration-partition)
@@ -31,16 +31,26 @@ composer require orptech/laravel-migration-partition
 ## DBMS Support
 
 - PostgreSQL
+- MySQL
+- MariaDB
 
 ### Planned Development
 
-- MySQL - Looking for Contributors
-- MariaDB - Looking for Contributors
 - SQL Server 2017+
 - SQLite 3.8.8+
 
 ## Usage
-This package currently, only supports PostgreSQL.
+The same API works for PostgreSQL, MySQL and MariaDB. The package picks the grammar from your connection's driver.
+
+## MySQL / MariaDB
+MySQL and MariaDB keep partitions inside the partitioned table instead of as separate tables, so a few things work differently:
+
+- Range partitioned tables use `RANGE COLUMNS` and get a `{table}_default` partition for values below `MAXVALUE`. New range partitions are split off from it, so create them in ascending order. Only the end value is used. Use `dateTime` rather than `timestamp` columns as range keys.
+- List partitioned tables use `LIST COLUMNS` and get a `{table}_default` partition that holds `NULL`. Pass integers (not numeric strings) as list values for integer columns.
+- Hash partitioned tables use `KEY` partitioning. Each `createHashPartition` call adds one partition. MySQL ignores the modulus and remainder because it distributes rows itself. You can't attach or detach hash partitions.
+- `attachRangePartition` / `attachListPartition` add a partition named after the table you pass and move that table's rows into it. The table stays behind, empty.
+- `detachPartition` moves the partition's rows into a new table named after the partition, then drops the partition.
+- Every primary/unique key must include the partition column, as in PostgreSQL. You can keep `$table->id()` with a composite key such as `'id', 'created_at'`.
 
 ## PostgreSQL
 PostgreSQL also known as Postgres, is a free and open-source relational database management system (RDBMS) emphasizing extensibility and SQL compliance.

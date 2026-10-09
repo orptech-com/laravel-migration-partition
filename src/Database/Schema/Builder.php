@@ -6,22 +6,29 @@ use Closure;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Connection;
+use ORPTech\MigrationPartition\Database\Schema\Grammars\MariaDbGrammar;
+use ORPTech\MigrationPartition\Database\Schema\Grammars\MySqlGrammar;
 use ORPTech\MigrationPartition\Database\Schema\Grammars\PostgresGrammar;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Schema\Builder as IlluminateBuilder;
+use RuntimeException;
 
 class Builder extends IlluminateBuilder
 {
     /**
      * The schema grammar instance.
      *
-     * @var PostgresGrammar
+     * @var PostgresGrammar|MySqlGrammar|MariaDbGrammar
      */
     protected $grammar;
 
     public function __construct(Connection $connection)
     {
-        $connection->setSchemaGrammar(new PostgresGrammar($connection));
+        $connection->setSchemaGrammar(match ($connection->getDriverName()) {
+            'pgsql' => new PostgresGrammar($connection),
+            'mysql' => new MySqlGrammar($connection),
+            'mariadb' => new MariaDbGrammar($connection),
+            default => throw new RuntimeException("Partitioning is not supported for the [{$connection->getDriverName()}] driver."),
+        });
         parent::__construct($connection);
     }
 
@@ -54,12 +61,12 @@ class Builder extends IlluminateBuilder
      * @param string $table
      * @param Closure $callback
      * @param string $suffixForPartition
-     * @param string $startDate
-     * @param string $endDate
+     * @param string|int $startDate
+     * @param string|int $endDate
      * @return void
      * @throws BindingResolutionException
      */
-    public function createRangePartition(string $table, Closure $callback, string $suffixForPartition, string $startDate, string $endDate): void
+    public function createRangePartition(string $table, Closure $callback, string $suffixForPartition, string|int $startDate, string|int $endDate): void
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $suffixForPartition, $startDate, $endDate) {
             $blueprint->createRangePartition();
@@ -77,12 +84,12 @@ class Builder extends IlluminateBuilder
      * @param string $table
      * @param Closure $callback
      * @param string $partitionTableName
-     * @param string $startDate
-     * @param string $endDate
+     * @param string|int $startDate
+     * @param string|int $endDate
      * @return void
      * @throws BindingResolutionException
      */
-    public function attachRangePartition(string $table, Closure $callback, string $partitionTableName, string $startDate, string $endDate): void
+    public function attachRangePartition(string $table, Closure $callback, string $partitionTableName, string|int $startDate, string|int $endDate): void
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $partitionTableName, $startDate, $endDate) {
             $blueprint->attachRangePartition();
@@ -122,11 +129,11 @@ class Builder extends IlluminateBuilder
      * @param string $table
      * @param Closure $callback
      * @param string $suffixForPartition
-     * @param string $listPartitionValue
+     * @param string|int $listPartitionValue
      * @return void
      * @throws BindingResolutionException
      */
-    public function createListPartition(string $table, Closure $callback, string $suffixForPartition, string $listPartitionValue): void
+    public function createListPartition(string $table, Closure $callback, string $suffixForPartition, string|int $listPartitionValue): void
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $suffixForPartition, $listPartitionValue) {
             $blueprint->createListPartition();
@@ -143,11 +150,11 @@ class Builder extends IlluminateBuilder
      * @param string $table
      * @param Closure $callback
      * @param string $partitionTableName
-     * @param string $listPartitionValue
+     * @param string|int $listPartitionValue
      * @return void
      * @throws BindingResolutionException
      */
-    public function attachListPartition(string $table, Closure $callback, string $partitionTableName, string $listPartitionValue): void
+    public function attachListPartition(string $table, Closure $callback, string $partitionTableName, string|int $listPartitionValue): void
     {
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $partitionTableName, $listPartitionValue) {
             $blueprint->attachListPartition();
@@ -215,6 +222,10 @@ class Builder extends IlluminateBuilder
      */
     public function attachHashPartition(string $table, Closure $callback, string $partitionTableName, int $hashModulus, int $hashRemainder): void
     {
+        if ($this->usesMySqlPartitioning()) {
+            throw new RuntimeException('Attaching hash partitions is not supported on MySQL and MariaDB.');
+        }
+
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $partitionTableName, $hashModulus, $hashRemainder) {
             $blueprint->attachHashPartition();
             $blueprint->partitionTableName = $partitionTableName;
@@ -232,7 +243,7 @@ class Builder extends IlluminateBuilder
      */
     public function getPartitions(string $table): array
     {
-        return  array_column(DB::select($this->grammar->compileGetPartitions($table)), 'tables');
+        return  array_column($this->connection->select($this->grammar->compileGetPartitions($table)), 'tables');
     }
 
     /**
@@ -242,7 +253,7 @@ class Builder extends IlluminateBuilder
      */
     public function getAllRangePartitionedTables(): array
     {
-        return  array_column(DB::select($this->grammar->compileGetAllRangePartitionedTables()), 'tables');
+        return  array_column($this->connection->select($this->grammar->compileGetAllRangePartitionedTables()), 'tables');
     }
 
     /**
@@ -252,7 +263,7 @@ class Builder extends IlluminateBuilder
      */
     public function getAllListPartitionedTables(): array
     {
-        return  array_column(DB::select($this->grammar->compileGetAllListPartitionedTables()), 'tables');
+        return  array_column($this->connection->select($this->grammar->compileGetAllListPartitionedTables()), 'tables');
     }
 
     /**
@@ -262,7 +273,7 @@ class Builder extends IlluminateBuilder
      */
     public function getAllHashPartitionedTables(): array
     {
-        return  array_column(DB::select($this->grammar->compileGetAllHashPartitionedTables()), 'tables');
+        return  array_column($this->connection->select($this->grammar->compileGetAllHashPartitionedTables()), 'tables');
     }
 
     /**
@@ -276,11 +287,36 @@ class Builder extends IlluminateBuilder
      */
     public function detachPartition(string $table, Closure $callback, string $partitionTableName): void
     {
+        if ($this->usesMySqlPartitioning() && in_array($this->getPartitionMethod($table), ['HASH', 'LINEAR HASH', 'KEY', 'LINEAR KEY'], true)) {
+            throw new RuntimeException('Detaching hash partitions is not supported on MySQL and MariaDB.');
+        }
+
         $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback, $partitionTableName) {
             $blueprint->detachPartition();
             $blueprint->partitionTableName = $partitionTableName;
             $callback($blueprint);
         }));
+    }
+
+    /**
+     * Determine if the connection keeps partitions inside the partitioned table.
+     *
+     * @return bool
+     */
+    protected function usesMySqlPartitioning(): bool
+    {
+        return in_array($this->connection->getDriverName(), ['mysql', 'mariadb'], true);
+    }
+
+    /**
+     * Get the MySQL / MariaDB partitioning method of a table.
+     *
+     * @param string $table
+     * @return string|null
+     */
+    protected function getPartitionMethod(string $table): ?string
+    {
+        return $this->connection->scalar($this->grammar->compileGetPartitionMethod($this->connection->getTablePrefix().$table));
     }
 
     /**
